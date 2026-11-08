@@ -50,9 +50,142 @@
       } catch (e) {}
     </script>
     <script type="module" crossorigin src="./assets/index-238e164c.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-f7c02c7a.css">
+    <link rel="stylesheet" crossorigin href="./assets/index-f5685f5e.css">
   </head>
   <body>
+<!--splash-->
+<style>
+#ms-splash{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;overflow:hidden;pointer-events:auto;--H:clamp(60px,18vw,110px);
+  --sp-bg:#F2F3F5;--sp-glow:rgba(0,0,0,.07);--sp-blob:rgba(120,128,140,.30)}
+:root[data-theme=dark] #ms-splash{--sp-bg:#000;--sp-glow:rgba(255,255,255,.11);--sp-blob:rgba(200,206,214,.22)}
+#ms-splash .sp-back{position:absolute;inset:0;background:radial-gradient(55% 42% at 50% 50%,var(--sp-glow),transparent 72%),var(--sp-bg)}
+#ms-splash .sp-blob{position:absolute;width:46vmax;height:46vmax;border-radius:50%;background:var(--sp-blob);filter:blur(70px);opacity:0}
+#ms-splash .sp-b1{left:-12vmax;top:-14vmax}#ms-splash .sp-b2{right:-14vmax;bottom:-16vmax}
+#ms-splash .sp-grp{position:relative;display:flex;align-items:center;gap:calc(var(--H)*.3)}
+#ms-splash .sp-ic{position:relative;z-index:3;width:var(--H);height:var(--H);flex:none;transform-origin:0 0}
+#ms-splash .sp-ic svg{position:relative;z-index:2;width:100%;height:100%;display:block;opacity:0}
+#ms-splash .sp-drop{position:absolute;inset:-24%;z-index:1;border-radius:50%;opacity:0;
+  background:radial-gradient(62% 52% at 32% 24%,rgba(255,255,255,.75),rgba(255,255,255,0) 62%),radial-gradient(80% 70% at 70% 88%,rgba(255,255,255,.28),rgba(255,255,255,0) 62%),rgba(255,255,255,.10);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.35),inset 0 4px 10px rgba(255,255,255,.55),inset 0 -12px 26px rgba(255,255,255,.16),0 24px 60px -14px rgba(0,0,0,.55);
+}
+:root:not([data-theme=dark]) #ms-splash .sp-drop{background:radial-gradient(62% 52% at 32% 24%,rgba(255,255,255,.95),rgba(255,255,255,0) 62%),radial-gradient(80% 70% at 70% 88%,rgba(255,255,255,.6),rgba(255,255,255,0) 62%),rgba(255,255,255,.35);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.9),inset 0 -10px 24px rgba(0,0,0,.08),0 0 0 .5px rgba(0,0,0,.08),0 24px 50px -16px rgba(0,0,0,.35)}
+#ms-splash .sp-lock{--h:var(--H)!important;opacity:0;transform-origin:0 0}
+#ms-splash .sp-lock .brand-mir{background:none!important;-webkit-text-fill-color:var(--bw-t1)!important;color:var(--bw-t1)!important;animation:none!important}
+#ms-splash .sp-lock .brand-biz::after{animation:none!important;left:-60%}
+#ms-splash .sp-lock .brand-biz.sp-shine::after{animation:bw-sheen-h 1.1s cubic-bezier(.22,.61,.36,1) 1 both!important}
+#ms-splash .sp-lock i{will-change:transform}
+html.sp-on .sidebar .logo>*,html.sp-on .topbar a.row>svg,html.sp-on .topbar a.row>.brand{visibility:hidden}
+</style>
+<div id="ms-splash" aria-hidden="true">
+  <div class="sp-back"><div class="sp-blob sp-b1"></div><div class="sp-blob sp-b2"></div></div>
+  <div class="sp-grp">
+    <div class="sp-ic"><div class="sp-drop"></div><svg viewBox="0 0 64 64"><rect x="0.75" y="0.75" width="62.5" height="62.5" rx="17.5" fill="#0A0A0A" stroke="var(--logo-edge, #0A0A0A)" stroke-width="1.5"/><path d="M18 45V19l14 16 14-16v26" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <span class="bw-lock sp-lock"><span class="brand-mir"><i>M</i><i>I</i><i>R</i><i>S</i><i>T</i><i>U</i><i>D</i><i>Y</i></span><span class="brand-biz"><i>B</i><i>U</i><i>S</i><i>I</i><i>N</i><i>E</i><i>S</i><i>S</i></span></span>
+  </div>
+</div>
+<script>
+(function () {
+  var el = document.getElementById("ms-splash"), root = document.documentElement;
+  if (!el) return;
+  var skip = false;
+  try { if (sessionStorage.getItem("biz:splash")) skip = true; sessionStorage.setItem("biz:splash", "1"); } catch (e) {}
+  try { if (matchMedia("(prefers-reduced-motion: reduce)").matches) skip = true; } catch (e) {}
+  if (!el.animate) skip = true;
+  if (skip) { el.parentNode.removeChild(el); return; }
+  root.classList.add("sp-on");
+  var $ = function (s) { return el.querySelector(s); };
+  var ic = $(".sp-ic"), drop = $(".sp-drop"), svg = $(".sp-ic svg"), lock = $(".sp-lock"), back = $(".sp-back");
+  var chip = $(".brand-biz"), mirL = el.querySelectorAll(".brand-mir i"), bizL = el.querySelectorAll(".brand-biz i");
+  var SPRING = "cubic-bezier(.34,1.56,.64,1)", BOUNCE = "cubic-bezier(.3,1.9,.5,1)", SMOOTH = "cubic-bezier(.65,0,.2,1)";
+  var A = function (n, k, o) { o.fill = o.fill || "both"; return n.animate(k, o); };
+  var done = false;
+  function finish() {
+    if (done) return; done = true;
+    root.classList.remove("sp-on");
+    requestAnimationFrame(function () { if (el.parentNode) el.parentNode.removeChild(el); });
+  }
+  function rectOf(n) {
+    if (!n) return null;
+    var r = n.getBoundingClientRect(), cs = getComputedStyle(n);
+    return r.width > 1 && r.height > 1 && cs.display !== "none" && r.right > 0 && r.left < innerWidth && r.bottom > 0 && r.top < innerHeight ? r : null;
+  }
+  function targets() {
+    var a = document.querySelector(".sidebar .logo"), t = a && rectOf(a.querySelector("svg"));
+    if (t) return { ic: t, lk: rectOf(a.querySelector(".word")) };
+    var b = document.querySelector(".topbar a.row"); t = b && rectOf(b.querySelector("svg"));
+    if (t) return { ic: t, lk: rectOf(b.querySelector(".brand")) };
+    return null;
+  }
+  function fly(n, to) {
+    var s = n.getBoundingClientRect(), k = to.height / s.height;
+    return A(n, [{ transform: "translate(0,0) scale(1)" },
+                 { transform: "translate(" + (to.left - s.left) + "px," + (to.top - s.top) + "px) scale(" + k + ")" }],
+             { duration: 820, easing: SMOOTH, fill: "forwards" });
+  }
+  function leave() {
+    el.style.pointerEvents = "none";
+    var t = targets();
+    A(back, [{ opacity: 1 }, { opacity: 0 }], { duration: 620, delay: t ? 260 : 120, easing: "ease-out" });
+    if (!t) {
+      A($(".sp-grp"), [{ opacity: 1, transform: "scale(1)" }, { opacity: 0, transform: "scale(.94)" }], { duration: 450, easing: "ease-in" }).onfinish = finish;
+      return;
+    }
+    ic.style.transform = "none";
+    fly(ic, t.ic).onfinish = finish;
+    if (t.lk) fly(lock, t.lk);
+    else A(lock, [{ opacity: 1 }, { opacity: 0 }], { duration: 300, easing: "ease-in" });
+  }
+  function waitApp(t0) {
+    if (targets() || performance.now() - t0 > 6000) return leave();
+    requestAnimationFrame(function () { waitApp(t0); });
+  }
+  function play() {
+    var shift = (el.querySelector(".sp-grp").getBoundingClientRect().width - ic.offsetWidth) / 2;
+    ic.style.transform = "translateX(" + shift + "px)";
+    el.querySelectorAll(".sp-blob").forEach(function (b, i) {
+      A(b, [{ opacity: 0, transform: "scale(.6)" }, { opacity: 1, transform: "scale(1)" }], { duration: 1600, delay: 100 + i * 200, easing: "ease-out" });
+    });
+    // 1. капля падает, сплющивается и закручивается
+    A(drop, [
+      { opacity: 0, transform: "translateY(-55vh) rotate(-60deg) scale(.55,1.35)", borderRadius: "50% 50% 50% 50% / 64% 64% 36% 36%" },
+      { opacity: 1, transform: "translateY(0) rotate(0deg) scale(1.26,.76)", borderRadius: "50%", offset: .42 },
+      { transform: "translateY(0) rotate(70deg) scale(.86,1.14)", borderRadius: "44% 56% 40% 60% / 58% 42% 58% 42%", offset: .6 },
+      { transform: "translateY(0) rotate(150deg) scale(1.07,.94)", borderRadius: "56% 44% 54% 46% / 46% 56% 44% 54%", offset: .76 },
+      { transform: "translateY(0) rotate(205deg) scale(.98,1.02)", borderRadius: "49% 51% 48% 52% / 52% 48% 52% 48%", offset: .9 },
+      { opacity: 1, transform: "translateY(0) rotate(240deg) scale(1)", borderRadius: "50%" }
+    ], { duration: 1150, easing: "cubic-bezier(.33,0,.2,1)" });
+    // 2. внутри капли проявляется значок
+    A(svg, [{ opacity: 0, transform: "scale(.35) rotate(-25deg)", filter: "blur(8px)" }, { opacity: 1, transform: "scale(1) rotate(0)", filter: "blur(0)" }],
+      { duration: 620, delay: 620, easing: SPRING });
+    // 3. капля стягивается в форму значка и растворяется
+    A(drop, [{ opacity: 1, transform: "rotate(240deg) scale(1)", borderRadius: "50%" },
+             { opacity: .9, transform: "rotate(330deg) scale(.78)", borderRadius: "34%", offset: .55 },
+             { opacity: 0, transform: "rotate(360deg) scale(.69)", borderRadius: "27%" }],
+      { duration: 760, delay: 1150, easing: "cubic-bezier(.5,0,.3,1)", fill: "forwards" });
+    // 4. значок уезжает влево, справа «выпрыгивает» надпись
+    A(ic, [{ transform: "translateX(" + shift + "px)" }, { transform: "translateX(0)" }], { duration: 760, delay: 1180, easing: "cubic-bezier(.34,1.32,.5,1)", fill: "forwards" });
+    A(lock, [{ opacity: 0 }, { opacity: 1 }], { duration: 10, delay: 1420 });
+    mirL.forEach(function (n, i) {
+      A(n, [{ opacity: 0, transform: "translateY(90%) scale(.3)" }, { opacity: 1, transform: "translateY(0) scale(1)" }],
+        { duration: 560, delay: 1430 + i * 45, easing: BOUNCE });
+    });
+    A(chip, [{ opacity: 0, transform: "scale(.25,.5)" }, { opacity: 1, transform: "scale(1)" }], { duration: 680, delay: 1560, easing: SPRING });
+    bizL.forEach(function (n, i) {
+      A(n, [{ opacity: 0, transform: "translateY(110%)" }, { opacity: 1, transform: "translateY(0)" }],
+        { duration: 520, delay: 1720 + i * 40, easing: BOUNCE });
+    });
+    setTimeout(function () { chip.classList.add("sp-shine"); }, 2080);
+    // 5. как только приложение готово — всё летит на своё место
+    setTimeout(function () { waitApp(performance.now()); }, 2800);
+  }
+  var started = false, go = function () { if (!started) { started = true; requestAnimationFrame(play); } };
+  try { document.fonts.load('800 20px FigtreeLogo').then(go, go); } catch (e) { go(); }
+  setTimeout(go, 700);
+  setTimeout(finish, 12000);
+})();
+</script>
+<!--/splash-->
     <div id="root"></div>
   </body>
 </html>
