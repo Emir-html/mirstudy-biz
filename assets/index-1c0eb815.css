@@ -30,6 +30,24 @@
 .brand .brand-mir,.brand .brand-biz{font-size:9px!important;letter-spacing:.08em!important}
 .brand .brand-mir{padding:0 5px!important}.brand .brand-biz{padding:3px 5px!important;border-radius:5px}
 @media (prefers-reduced-motion:reduce){.brand-mir,.brand-biz::after{transition:none!important;animation:none!important}}
+/* Тёмная тема: BUSINESS — чёрные буквы на белой «жидкостеклянной» плашке без рамки */
+:root[data-theme=dark] .logo .word .brand-biz,:root[data-theme=dark] .brand .brand-biz,:root[data-theme=dark] .bw-lock .brand-biz{
+  background:
+    radial-gradient(120% 90% at 30% 0%,rgba(255,255,255,.95) 0%,rgba(255,255,255,0) 60%),
+    linear-gradient(180deg,rgba(255,255,255,.97) 0%,rgba(236,239,243,.92) 48%,rgba(204,209,216,.88) 100%)!important;
+  -webkit-backdrop-filter:blur(12px) saturate(170%);backdrop-filter:blur(12px) saturate(170%);
+  -webkit-text-fill-color:#0A0A0A!important;color:#0A0A0A!important;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.95),inset 0 -2px 3px rgba(0,0,0,.14),inset 0 0 0 .5px rgba(255,255,255,.35),0 6px 18px -8px rgba(255,255,255,.28),0 2px 6px -2px rgba(0,0,0,.6)!important}
+:root[data-theme=dark] .logo .word .brand-biz::after,:root[data-theme=dark] .brand .brand-biz::after,:root[data-theme=dark] .bw-lock .brand-biz::after{
+  background:linear-gradient(100deg,transparent 0%,rgba(150,160,175,.32) 28%,rgba(255,255,255,1) 50%,rgba(150,160,175,.32) 72%,transparent 100%);width:50%;
+  animation:bw-sheen 1.6s .6s cubic-bezier(.22,.61,.36,1) 1 both,bw-glass 9s 4s cubic-bezier(.45,.05,.25,1) infinite}
+@keyframes bw-glass{0%{left:-60%}16%{left:120%}100%{left:120%}}
+:root[data-theme=dark] .logo:hover .brand-biz::after,:root[data-theme=dark] a:hover>.brand .brand-biz::after,:root[data-theme=dark] .logo:active .brand-biz::after,:root[data-theme=dark] a:active>.brand .brand-biz::after{animation:bw-sheen-h 1s cubic-bezier(.22,.61,.36,1) 1 both}
+@keyframes bw-sheen-h{from{left:-60%}to{left:120%}}
+@media (prefers-reduced-motion:reduce){:root[data-theme=dark] .brand-biz::after{animation:none!important}}
+:root[data-theme=dark] .logo .word .brand-biz::before,:root[data-theme=dark] .brand .brand-biz::before,:root[data-theme=dark] .bw-lock .brand-biz::before{
+  content:"";position:absolute;left:6%;right:6%;top:1px;height:42%;border-radius:6px 6px 10px 10px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.75),rgba(255,255,255,0))}
 /* Формула + обозначения — одна рамка в прежнем стиле (пунктир, янтарный) */
 .lb-fwrap{border-radius:18px;border:1px dashed var(--amber);border:1px dashed color-mix(in srgb,var(--amber) 60%,var(--border));background:var(--surface);overflow:hidden}
 .lb-fwrap .lb-formula{border:none!important;border-radius:0;background:transparent}
