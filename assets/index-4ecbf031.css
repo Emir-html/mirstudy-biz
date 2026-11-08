@@ -204,3 +204,25 @@ a.row:has(>.bw-lock)>svg{width:36px;height:36px}
 .lb-fex{border-top:1px dashed var(--border);padding:12px 16px 14px;background:color-mix(in srgb,var(--surface-2) 70%,transparent)}
 .lb-fex-k{display:inline-block;padding:4px 8px;border-radius:6px;background:var(--surface);border:1px solid var(--border);color:var(--text-muted);margin-bottom:9px}
 .lb-fex-b{font:500 13px/1.6 var(--mono);color:var(--text-muted);white-space:pre-wrap}
+
+/* ══ Тема «Жемчуг»: чёрно-белые акценты в оттенках логотипа ══ */
+.pf-colors button[title="Жемчуг"]{background:radial-gradient(120% 90% at 30% 0%,#fff 0,rgba(255,255,255,0) 60%),linear-gradient(180deg,#fff,#EEF0F3 48%,#B9BFC8);color:#000;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.pf-colors button[title="Жемчуг"].on{box-shadow:inset 0 0 0 1px rgba(0,0,0,.12),0 0 0 2px var(--surface),0 0 0 4px var(--text)}
+/* — тёмная — */
+:root[data-theme=dark][data-accent=pearl]{--paper:#000;--surface:#0D0D0F;--surface-2:#080809;--border:#1B1C1F;--text:#FFFFFF;--text-muted:#8F949B;
+ --sage:#FFFFFF;--sage-soft:#151619;--blue:#FFFFFF;--blue-soft:#151619;--cta-bg:#F4F5F7;--cta-text:#000;--teal:#D5D9DE;--teal-soft:#141518}
+:root[data-theme=dark][data-accent=pearl] body{background:radial-gradient(90% 60% at 60% -10%,#16171A 0%,#000 60%) fixed,#000}
+:root[data-theme=dark][data-accent=pearl] .sidebar{background:#050506;border-right:1px solid transparent;box-shadow:inset -1px 0 0 rgba(255,255,255,.07)}
+:root[data-accent=pearl] .side-item,:root[data-accent=pearl] .pill,:root[data-accent=pearl] .btn-primary,:root[data-accent=pearl] .next-link{transition:background .25s,color .25s,box-shadow .25s,transform .15s}
+:root[data-theme=dark][data-accent=pearl] .side-item.active{background:radial-gradient(120% 90% at 30% 0%,#fff 0,rgba(255,255,255,0) 60%),linear-gradient(180deg,#FFFFFF 0%,#EEF0F3 48%,#C3C9D1 100%);color:#000;box-shadow:inset 0 1px 1px #fff,inset 0 -2px 3px rgba(0,0,0,.18),0 8px 22px -10px rgba(255,255,255,.35)}
+:root[data-theme=dark][data-accent=pearl] :is(.btn-primary,.next-link,.np-ok,.calc-key.eq,.pill.active,.calc-key.put){background:radial-gradient(120% 90% at 30% 0%,#fff 0,rgba(255,255,255,0) 60%),linear-gradient(180deg,#FFFFFF 0%,#EEF0F3 48%,#C3C9D1 100%)!important;color:#000!important;border-color:transparent!important;box-shadow:inset 0 1px 1px #fff,inset 0 -2px 3px rgba(0,0,0,.16),0 10px 26px -12px rgba(255,255,255,.4)}
+:root[data-theme=dark][data-accent=pearl] :is(.card,.tblock,.ms-hero,.ms-stats,.ms-sec,.ms-stat,.tw-side,.dstats>*){background:linear-gradient(var(--surface),var(--surface)) padding-box,linear-gradient(160deg,rgba(255,255,255,.26),rgba(255,255,255,.05) 38%,rgba(255,255,255,.14)) border-box!important;border:1px solid transparent!important}
+:root[data-theme=dark][data-accent=pearl] .ms-hero{background:linear-gradient(135deg,#1A1B1E,#0B0B0D 55%,#121316) padding-box,linear-gradient(160deg,rgba(255,255,255,.35),rgba(255,255,255,.05) 40%,rgba(255,255,255,.18)) border-box!important}
+/* — светлая: глянцевый чёрный, как плашка BUSINESS в светлой теме — */
+:root:not([data-theme=dark])[data-accent=pearl]{--sage:#0A0A0B;--sage-soft:#ECEEF1;--blue:#0A0A0B;--blue-soft:#ECEEF1;--cta-bg:#0A0A0B;--cta-text:#FFFFFF;--teal:#4A4F57;--teal-soft:#EEF0F2}
+:root:not([data-theme=dark])[data-accent=pearl] body{background:radial-gradient(90% 60% at 60% -10%,#FFFFFF 0%,var(--paper) 60%) fixed,var(--paper)}
+:root:not([data-theme=dark])[data-accent=pearl] .side-item.active{background:linear-gradient(180deg,#3A3E45 0%,#121417 46%,#000 100%);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 8px 18px -10px rgba(0,0,0,.6)}
+:root:not([data-theme=dark])[data-accent=pearl] :is(.btn-primary,.next-link,.np-ok,.calc-key.eq,.pill.active,.calc-key.put){background:linear-gradient(180deg,#3A3E45 0%,#121417 46%,#000 100%)!important;color:#fff!important;border-color:transparent!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 10px 22px -12px rgba(0,0,0,.55)}
+:root:not([data-theme=dark])[data-accent=pearl] :is(.card,.tblock,.ms-hero,.ms-stats,.ms-sec,.ms-stat,.tw-side,.dstats>*){background:linear-gradient(var(--surface),var(--surface)) padding-box,linear-gradient(160deg,rgba(0,0,0,.18),rgba(0,0,0,.04) 40%,rgba(0,0,0,.12)) border-box!important;border:1px solid transparent!important}
+:root:not([data-theme=dark])[data-accent=pearl] .ms-hero{background:linear-gradient(135deg,#FFFFFF,#F3F4F6 55%,#ECEEF1) padding-box,linear-gradient(160deg,rgba(0,0,0,.22),rgba(0,0,0,.04) 40%,rgba(0,0,0,.14)) border-box!important}
+:root:not([data-theme=dark])[data-accent=pearl] .grp-chip.on .grp-box{color:#fff}
