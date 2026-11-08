@@ -16,3 +16,9 @@
 :root[data-theme=dark] .logo .word,:root[data-theme=dark] .brand,:root[data-theme=dark] span.mono:has(>.brand-biz){filter:drop-shadow(0 0 6px rgba(43,255,158,.18))}
 :root[data-theme=dark] .logo .word .brand-biz,:root[data-theme=dark] .brand .brand-biz,:root[data-theme=dark] span.mono .brand-biz{filter:drop-shadow(0 0 4px rgba(255,255,255,.08))}
 @media (max-width:767px){.brand{letter-spacing:.1em!important}.brand .brand-biz{letter-spacing:.1em}}
+/* Формула + обозначения — одна карточка */
+.lb-fwrap{border-radius:18px;overflow:hidden;border:1px solid var(--amber);border:1px solid color-mix(in srgb,var(--amber) 38%,var(--border));background:var(--surface)}
+.lb-fhead{background:var(--amber-soft);padding:8px 14px;display:flex;align-items:center}
+.lb-fhead .tg{font:700 10.5px/1 var(--mono);letter-spacing:.06em;color:var(--cta-text);background:var(--amber);padding:5px 8px;border-radius:7px}
+.lb-fwrap .lb-formula{border:none!important;border-radius:0;background:transparent;font-size:14px}
+.lb-fwrap .bz-abbr-list{margin:0;border:none;border-top:1px dashed var(--border);border-radius:0;padding:10px 16px 12px}
