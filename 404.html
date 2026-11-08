@@ -50,66 +50,71 @@
       } catch (e) {}
     </script>
     <script type="module" crossorigin src="./assets/index-238e164c.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-f5685f5e.css">
+    <link rel="stylesheet" crossorigin href="./assets/index-64777b91.css">
   </head>
   <body>
 <!--splash-->
 <style>
 #ms-splash{position:fixed;inset:0;z-index:2147483000;overflow:hidden;pointer-events:auto;--H:clamp(60px,18vw,110px);
-  --sp-bg:#F2F3F5;--sp-glow:rgba(0,0,0,.07);--sp-blob:rgba(120,128,140,.30);--sp-liq:linear-gradient(180deg,#3A3E45,#000)}
-:root[data-theme=dark] #ms-splash{--sp-bg:#000;--sp-glow:rgba(255,255,255,.11);--sp-blob:rgba(200,206,214,.20);--sp-liq:linear-gradient(180deg,#FFF,#B9BFC8)}
+  --sp-bg:#F2F3F5;--sp-glow:rgba(0,0,0,.07);--sp-blob:rgba(120,128,140,.30);
+  --liq1:radial-gradient(circle at 34% 28%,#5A5F68 0,#1A1C20 45%,#000 80%);--liq2:linear-gradient(180deg,#3A3E45,#000)}
+:root[data-theme=dark] #ms-splash{--sp-bg:#000;--sp-glow:rgba(255,255,255,.11);--sp-blob:rgba(200,206,214,.20);--liq2:linear-gradient(180deg,#FFF 0%,#E6E9ED 45%,#B4BAC3 100%)}
 #ms-splash .mss-back{position:absolute;inset:0;background:radial-gradient(55% 42% at 50% 50%,var(--sp-glow),transparent 72%),var(--sp-bg)}
 #ms-splash .mss-blob{position:absolute;width:46vmax;height:46vmax;border-radius:50%;background:var(--sp-blob);filter:blur(70px);opacity:0}
 #ms-splash .mss-b1{left:-12vmax;top:-14vmax}#ms-splash .mss-b2{right:-14vmax;bottom:-16vmax}
+#ms-splash .mss-goo{position:absolute;pointer-events:none;filter:url(#mss-goo)}
+:root[data-theme=dark] #ms-splash .mss-goo1{filter:url(#mss-goo) drop-shadow(0 0 1px rgba(255,255,255,.95)) drop-shadow(0 0 10px rgba(255,255,255,.24))}
+:root[data-theme=dark] #ms-splash{--liq1:radial-gradient(circle at 34% 28%,#8A9099 0,#2A2D33 42%,#0A0A0A 82%)}
+:root:not([data-theme=dark]) #ms-splash .mss-goo1{filter:url(#mss-goo) drop-shadow(0 6px 12px rgba(0,0,0,.28))}
+#ms-splash .mss-goo2{filter:url(#mss-goo) drop-shadow(0 6px 14px rgba(0,0,0,.35))}
+#ms-splash .mss-g{position:absolute;left:0;top:0;border-radius:50%;will-change:transform}
+#ms-splash .mss-goo1 .mss-g{background:var(--liq1)}
+#ms-splash .mss-goo2 .mss-g,#ms-splash .mss-bar{background:var(--liq2)}
+#ms-splash .mss-bar{position:absolute;transform-origin:0 50%}
 #ms-splash .mss-stage{position:absolute;inset:0;display:grid;place-items:center}
 #ms-splash .mss-grp{position:relative;display:flex;align-items:center;gap:calc(var(--H)*.3)}
 #ms-splash .mss-ic{position:relative;z-index:3;width:var(--H);height:var(--H);flex:none;transform-origin:0 0}
-#ms-splash .mss-ic svg{position:relative;z-index:2;width:100%;height:100%;display:block;opacity:0}
-#ms-splash .mss-goo{position:absolute;top:0;bottom:0;filter:url(#mss-goo);pointer-events:none}
-#ms-splash .mss-g{position:absolute;left:0;top:0;border-radius:50%;background:var(--sp-liq);will-change:transform}
-#ms-splash .mss-jet{position:absolute;top:0;width:10px;border-radius:5px;background:var(--sp-liq)}
-#ms-splash .mss-bar{position:absolute;background:var(--sp-liq);transform-origin:0 50%}
+#ms-splash .mss-ic svg{position:relative;width:100%;height:100%;display:block;opacity:0;overflow:visible}
 #ms-splash .mss-glass,#ms-splash .mss-orb{position:absolute;left:0;top:0;border-radius:50%;opacity:0;pointer-events:none}
-#ms-splash .mss-glass{background:radial-gradient(62% 52% at 32% 24%,rgba(255,255,255,.75),rgba(255,255,255,0) 62%),radial-gradient(80% 70% at 70% 88%,rgba(255,255,255,.28),rgba(255,255,255,0) 62%),rgba(255,255,255,.10);
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.35),inset 0 4px 10px rgba(255,255,255,.55),inset 0 -12px 26px rgba(255,255,255,.16),0 24px 60px -14px rgba(0,0,0,.55)}
-:root:not([data-theme=dark]) #ms-splash .mss-glass{background:radial-gradient(62% 52% at 32% 24%,rgba(255,255,255,.95),rgba(255,255,255,0) 62%),radial-gradient(80% 70% at 70% 88%,rgba(255,255,255,.6),rgba(255,255,255,0) 62%),rgba(255,255,255,.35);
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.9),inset 0 -10px 24px rgba(0,0,0,.08),0 0 0 .5px rgba(0,0,0,.08),0 24px 50px -16px rgba(0,0,0,.35)}
-#ms-splash .mss-orb{background:radial-gradient(circle at 33% 27%,#FFF 0,rgba(255,255,255,.85) 7%,rgba(255,255,255,0) 24%),radial-gradient(circle at 62% 78%,rgba(255,255,255,.22),rgba(255,255,255,0) 38%),radial-gradient(circle at 50% 45%,#34373D 0,#121316 55%,#000 80%);
+#ms-splash .mss-glass{z-index:2;background:radial-gradient(60% 50% at 32% 24%,rgba(255,255,255,.7),rgba(255,255,255,0) 62%),radial-gradient(80% 70% at 70% 88%,rgba(255,255,255,.22),rgba(255,255,255,0) 62%);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.3),inset 0 4px 10px rgba(255,255,255,.4),inset 0 -12px 26px rgba(255,255,255,.12)}
+#ms-splash .mss-orb{z-index:4;background:radial-gradient(circle at 33% 27%,#FFF 0,rgba(255,255,255,.85) 7%,rgba(255,255,255,0) 24%),radial-gradient(circle at 62% 78%,rgba(255,255,255,.22),rgba(255,255,255,0) 38%),radial-gradient(circle at 50% 45%,#34373D 0,#121316 55%,#000 80%);
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.30),inset 0 -6px 14px rgba(255,255,255,.14),0 18px 40px -12px rgba(0,0,0,.6)}
 #ms-splash .mss-lock{--h:var(--H)!important;transform-origin:0 0}
 #ms-splash .mss-lock .brand-mir{background:none!important;-webkit-text-fill-color:var(--bw-t1)!important;color:var(--bw-t1)!important;animation:none!important}
-#ms-splash .mss-lock .brand-biz{opacity:0}
-#ms-splash .mss-lock .brand-mir i{opacity:0}
+#ms-splash .mss-lock .brand-biz,#ms-splash .mss-lock .brand-mir i{opacity:0}
 #ms-splash .mss-lock .brand-biz::after{animation:none!important;left:-60%}
-#ms-splash .mss-lock .brand-biz.mss-shine::after{animation:bw-sheen-h 1.1s cubic-bezier(.22,.61,.36,1) 1 both!important}
+#ms-splash .mss-lock .brand-biz.mss-shine::after{animation:bw-sheen-h 1s cubic-bezier(.22,.61,.36,1) 1 both!important}
 html.mss-on .sidebar .logo>*,html.mss-on .topbar a.row>svg,html.mss-on .topbar a.row>.brand{visibility:hidden}
 </style>
 <div id="ms-splash" aria-hidden="true">
-  <svg width="0" height="0" style="position:absolute"><filter id="mss-goo" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceGraphic" stdDeviation="7" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 26 -12"/></filter></svg>
+  <svg width="0" height="0" style="position:absolute"><filter id="mss-goo" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceGraphic" stdDeviation="6" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -10"/></filter></svg>
   <div class="mss-back"><div class="mss-blob mss-b1"></div><div class="mss-blob mss-b2"></div></div>
+  <div class="mss-goo mss-goo1"></div>
+  <div class="mss-goo mss-goo2"></div>
+  <div class="mss-glass"></div>
   <div class="mss-stage"><div class="mss-grp">
     <div class="mss-ic"><svg viewBox="0 0 64 64"><rect x="0.75" y="0.75" width="62.5" height="62.5" rx="17.5" fill="#0A0A0A" stroke="var(--logo-edge, #0A0A0A)" stroke-width="1.5"/><path d="M18 45V19l14 16 14-16v26" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <span class="bw-lock mss-lock"><span class="brand-mir"><i>M</i><i>I</i><i>R</i><i>S</i><i>T</i><i>U</i><i>D</i><i>Y</i></span><span class="brand-biz"><i>B</i><i>U</i><i>S</i><i>I</i><i>N</i><i>E</i><i>S</i><i>S</i></span></span>
   </div></div>
-  <div class="mss-goo"></div>
-  <div class="mss-glass"></div>
   <div class="mss-orb"></div>
 </div>
 <script>
 (function () {
   var el = document.getElementById("ms-splash"), root = document.documentElement;
   if (!el) return;
-  var skip = false;
-  try { if (sessionStorage.getItem("biz:splash")) skip = true; sessionStorage.setItem("biz:splash", "1"); } catch (e) {}
+  var skip = false, S = 1;
+  try { var m = /[?&]spslow=(\d+)/.exec(location.search); if (m) S = +m[1]; } catch (e) {}
+  try { if (sessionStorage.getItem("biz:splash") && S === 1) skip = true; sessionStorage.setItem("biz:splash", "1"); } catch (e) {}
   try { if (matchMedia("(prefers-reduced-motion: reduce)").matches) skip = true; } catch (e) {}
   if (!el.animate) skip = true;
   if (skip) { el.parentNode.removeChild(el); return; }
   root.classList.add("mss-on");
   var $ = function (s) { return el.querySelector(s); }, $$ = function (s) { return [].slice.call(el.querySelectorAll(s)); };
-  var ic = $(".mss-ic"), svg = $(".mss-ic svg"), lock = $(".mss-lock"), back = $(".mss-back"), goo = $(".mss-goo"),
-      glass = $(".mss-glass"), orb = $(".mss-orb"), chip = $(".brand-biz"), mirL = $$(".brand-mir i"), bizL = $$(".brand-biz i");
-  var S = 0.88; // общий темп
-  var SPRING = "cubic-bezier(.34,1.56,.64,1)", BOUNCE = "cubic-bezier(.3,1.9,.5,1)", SMOOTH = "cubic-bezier(.65,0,.2,1)";
+  var ic = $(".mss-ic"), svg = $(".mss-ic svg"), mPath = $(".mss-ic path"), back = $(".mss-back"),
+      g1 = $(".mss-goo1"), g2 = $(".mss-goo2"), glass = $(".mss-glass"), orb = $(".mss-orb"), chip = $(".brand-biz"),
+      mirL = $$(".brand-mir i"), bizL = $$(".brand-biz i");
+  var SPRING = "cubic-bezier(.34,1.56,.64,1)", BOUNCE = "cubic-bezier(.3,1.75,.5,1)", SOFT = "cubic-bezier(.45,0,.2,1)";
   var A = function (n, k, o) { o.fill = o.fill || "both"; o.duration *= S; o.delay = (o.delay || 0) * S; return n.animate(k, o); };
   var later = function (f, t) { return setTimeout(f, t * S); };
   var rnd = function (a, b) { return a + Math.random() * (b - a); };
@@ -119,16 +124,36 @@ html.mss-on .sidebar .logo>*,html.mss-on .topbar a.row>svg,html.mss-on .topbar a
     root.classList.remove("mss-on");
     requestAnimationFrame(function () { if (el.parentNode) el.parentNode.removeChild(el); });
   }
-  var gx = 0, H, D, cx, cy;
-  var at = function (x, y, s, extra) { return "translate(" + (x - gx) + "px," + y + "px) scale(" + (s == null ? 1 : s) + ")" + (extra || ""); };
-  function blob(d) {
+  var ROOT = { ox: 0, oy: 0 };
+  function T(box, x, y, s, extra) { return "translate(" + (x - box.ox) + "px," + (y - box.oy) + "px) scale(" + (s == null ? 1 : s) + ")" + (extra || ""); }
+  function setBox(box, l, t, w, h) { box.ox = l; box.oy = t; box.style.left = l + "px"; box.style.top = t + "px"; box.style.width = w + "px"; box.style.height = h + "px"; }
+  function blob(box, d) {
     var b = document.createElement("i"); b.className = "mss-g";
     b.style.width = b.style.height = d + "px"; b.style.marginLeft = b.style.marginTop = (-d / 2) + "px";
-    goo.appendChild(b); return b;
+    b.style.transform = "scale(0)"; box.appendChild(b); return b;
   }
   function place(n, d) { n.style.width = n.style.height = d + "px"; n.style.marginLeft = n.style.marginTop = (-d / 2) + "px"; }
   var ctr = function (r) { return [r.left + r.width / 2, r.top + r.height / 2]; };
-
+  // «струя»: голова идёт по кривой, хвост из капель повторяет её путь с отставанием — кадр за кадром
+  function snake(box, path, rad, dur, lag, n, delay) {
+    var segs = [], d = 64;
+    for (var i = 0; i < n; i++) segs.push(blob(box, d));
+    var D = dur * S, L = lag * S;
+    later(function () {
+      var t0 = performance.now();
+      (function frame(now) {
+        var t = now - t0;
+        for (var i = 0; i < n; i++) {
+          var ti = (t - i * L / n) / D, c = Math.max(0, Math.min(1, ti)), p = path(c);
+          var r = ti <= 0 ? 0 : rad(c) * (1 - .5 * i / n);
+          segs[i].style.transform = T(box, p[0], p[1], 2 * r / d);
+        }
+        if (t < D + L) requestAnimationFrame(frame);
+        else for (var k = 1; k < n; k++) segs[k].remove();
+      })(t0);
+    }, delay);
+    return segs[0];
+  }
   function rectOf(n) {
     if (!n) return null;
     var r = n.getBoundingClientRect(), cs = getComputedStyle(n);
@@ -141,28 +166,27 @@ html.mss-on .sidebar .logo>*,html.mss-on .topbar a.row>svg,html.mss-on .topbar a
     if (t) return { ic: t, lk: b.querySelector(".brand"), icn: b.querySelector("svg") };
     return null;
   }
-
-  // Финал: капля летит на место значка и «раскрывается» в настоящий логотип
+  var H, cx, cy, ox, oy, OD;
+  // финал: общая капля летит на место значка и раскрывается в настоящий логотип
   function leave() {
     el.style.pointerEvents = "none";
     var t = targets();
-    A(back, [{ opacity: 1 }, { opacity: 0 }], { duration: 700, delay: t ? 120 : 0, easing: "ease-out" });
-    if (!t) { A(orb, [{ transform: at(cx, cy, 1), opacity: 1 }, { transform: at(cx, cy, .2), opacity: 0 }], { duration: 450, easing: "ease-in" }).onfinish = finish; return; }
-    var c = ctr(t.ic), k = t.ic.width / D, dx = c[0] - cx, dy = c[1] - cy, ang = Math.atan2(dy, dx) * 180 / Math.PI;
-    var midX = cx + dx * .55, midY = cy + dy * .55 - Math.min(80, Math.abs(dx) * .12);
-    var stretch = function (s, a, b) { return " rotate(" + ang + "deg) scale(" + a + "," + b + ") rotate(" + (-ang) + "deg)"; };
-    var f = A(orb, [
-      { transform: at(cx, cy, 1, stretch(1, 1, 1)), borderRadius: "50%", opacity: 1 },
-      { transform: at(cx + dx * .08, cy + dy * .08, .96, stretch(1, .82, 1.12)), borderRadius: "50%", offset: .14 },
-      { transform: at(midX, midY, (1 + k) / 2, stretch(1, 1.35, .74)), borderRadius: "50%", offset: .58 },
-      { transform: at(c[0], c[1], k * 1.06, stretch(1, .9, 1.1)), borderRadius: "40%", offset: .86 },
-      { transform: at(c[0], c[1], k, stretch(1, 1, 1)), borderRadius: "27%", opacity: 1 }
-    ], { duration: 900, easing: "cubic-bezier(.55,0,.25,1)", fill: "forwards" });
-    f.onfinish = function () {
+    A(back, [{ opacity: 1 }, { opacity: 0 }], { duration: 620, delay: t ? 80 : 0, easing: "ease-out" });
+    if (!t) { A(orb, [{ transform: T(ROOT, ox, oy, 1), opacity: 1 }, { transform: T(ROOT, ox, oy, .2), opacity: 0 }], { duration: 420, easing: "ease-in", fill: "forwards" }).onfinish = finish; return; }
+    var c = ctr(t.ic), k = t.ic.width / OD, dx = c[0] - ox, dy = c[1] - oy, ang = Math.atan2(dy, dx) * 180 / Math.PI;
+    var st = function (a, b) { return " rotate(" + ang + "deg) scale(" + a + "," + b + ") rotate(" + (-ang) + "deg)"; };
+    var midX = ox + dx * .5, midY = oy + dy * .5 - Math.min(70, Math.abs(dx) * .1);
+    A(orb, [
+      { transform: T(ROOT, ox, oy, 1, st(1, 1)), borderRadius: "50%" },
+      { transform: T(ROOT, ox + dx * .06, oy + dy * .06, .97, st(.86, 1.1)), borderRadius: "50%", offset: .12 },
+      { transform: T(ROOT, midX, midY, (1 + k) / 2, st(1.28, .8)), borderRadius: "50%", offset: .55 },
+      { transform: T(ROOT, c[0], c[1], k * 1.05, st(.93, 1.06)), borderRadius: "38%", offset: .86 },
+      { transform: T(ROOT, c[0], c[1], k, st(1, 1)), borderRadius: "27%" }
+    ], { duration: 760, easing: "cubic-bezier(.5,0,.2,1)", fill: "forwards" }).onfinish = function () {
       root.classList.remove("mss-on");
-      try { t.icn.animate([{ transform: "scale(.82)" }, { transform: "scale(1)" }], { duration: 420, easing: SPRING }); } catch (e) {}
-      try { if (t.lk) t.lk.animate([{ clipPath: "inset(0 100% 0 0)", opacity: .2 }, { clipPath: "inset(0 0 0 0)", opacity: 1 }], { duration: 520, easing: "cubic-bezier(.22,.61,.36,1)" }); } catch (e) {}
-      A(orb, [{ opacity: 1 }, { opacity: 0 }], { duration: 200, easing: "ease-out", fill: "forwards" }).onfinish = finish;
+      try { t.icn.animate([{ transform: "scale(.86)" }, { transform: "scale(1)" }], { duration: 380 * S, easing: SPRING }); } catch (e) {}
+      try { if (t.lk) t.lk.animate([{ clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0 0 0)" }], { duration: 460 * S, easing: "cubic-bezier(.22,.61,.36,1)" }); } catch (e) {}
+      A(orb, [{ opacity: 1 }, { opacity: 0 }], { duration: 160, easing: "ease-out", fill: "forwards" }).onfinish = finish;
     };
   }
   function waitApp(t0) {
@@ -171,120 +195,121 @@ html.mss-on .sidebar .logo>*,html.mss-on .topbar a.row>svg,html.mss-on .topbar a
   }
 
   function play() {
-    H = ic.offsetWidth; D = Math.round(H * 1.3);
-    var g = $(".mss-grp").getBoundingClientRect();
+    H = ic.offsetWidth;
+    var W = innerWidth, g = $(".mss-grp").getBoundingClientRect();
     cx = g.left + g.width / 2; cy = g.top + g.height / 2;
-    var shift = (g.width - H) / 2, gw = Math.min(innerWidth, g.width + D * 2);
-    gx = cx - gw / 2; goo.style.left = gx + "px"; goo.style.width = gw + "px"; glass.style.left = orb.style.left = gx + "px";
-    // замеряем места букв и плашки до анимаций
+    var shift = (g.width - H) / 2, icX = g.left + H / 2;   // итоговый центр значка
     var mirC = mirL.map(function (n) { return ctr(n.getBoundingClientRect()); }), mh = mirL[0].getBoundingClientRect().height;
-    var cr = chip.getBoundingClientRect();
-    var icFinal = [g.left + H / 2, cy];
+    var cr = chip.getBoundingClientRect(), cc = ctr(cr);
     ic.style.transform = "translateX(" + shift + "px)";
-    place(glass, D); place(orb, D);
-    glass.style.transform = orb.style.transform = at(cx, cy, 0);
+    var w1 = Math.min(W, W * .5 + 2 * H + 200);
+    setBox(g1, cx - w1 / 2, 0, w1, cy + H * 1.6);
+    setBox(g2, 0, cy - H * 1.25, W, H * 2.5);
     $$(".mss-blob").forEach(function (b, i) {
-      A(b, [{ opacity: 0, transform: "scale(.6)" }, { opacity: 1, transform: "scale(1)" }], { duration: 1600, delay: 100 + i * 200, easing: "ease-out" });
+      A(b, [{ opacity: 0, transform: "scale(.6)" }, { opacity: 1, transform: "scale(1)" }], { duration: 1400, delay: i * 150, easing: "ease-out" });
     });
 
-    // 1. тонкая быстрая струя сверху + капли дождя
-    var jet = document.createElement("div"); jet.className = "mss-jet"; goo.appendChild(jet);
-    jet.style.left = (cx - gx - 5) + "px"; jet.style.height = cy + "px";
-    A(jet, [{ clipPath: "inset(0 0 100% 0)", transform: "scaleX(.6)" },
-            { clipPath: "inset(0 0 0% 0)", transform: "scaleX(1)", offset: .28 },
-            { clipPath: "inset(0 0 0% 0)", transform: "scaleX(1.8)", offset: .55 },
-            { clipPath: "inset(100% 0 0 0)", transform: "scaleX(2.6)" }], { duration: 1050, easing: "cubic-bezier(.5,0,.5,1)" });
-    for (var i = 0; i < 11; i++) {
-      var d = rnd(8, 16), b = blob(d), x = cx + rnd(-10, 10);
-      A(b, [{ transform: at(x, -30 - rnd(0, 140), 1) }, { transform: at(cx + rnd(-4, 4), cy, .7) }],
-        { duration: rnd(380, 560), delay: rnd(0, 650), easing: "cubic-bezier(.55,0,1,.45)" });
-    }
-    // 2. в центре копится жидкость и хаотично закручивается
-    var core = blob(D);
-    A(core, [{ transform: at(cx, cy, 0), borderRadius: "50%" },
-             { transform: at(cx, cy, .3), borderRadius: "46% 54% 40% 60%", offset: .22 },
-             { transform: at(cx, cy, .55, " rotate(90deg)"), borderRadius: "58% 42% 55% 45%", offset: .45 },
-             { transform: at(cx, cy, .78, " rotate(200deg)"), borderRadius: "42% 58% 46% 54%", offset: .68 },
-             { transform: at(cx, cy, .92, " rotate(290deg) scale(1.14,.88)"), borderRadius: "50%", offset: .84 },
-             { transform: at(cx, cy, 1, " rotate(360deg)"), borderRadius: "50%" }],
-      { duration: 1700, delay: 230, easing: "ease-in-out" });
-    for (var s = 0; s < 6; s++) (function (s) {
-      var d = D * rnd(.26, .42), b = blob(d), a0 = rnd(0, 6.28), dir = Math.random() < .5 ? -1 : 1, kf = [{ transform: at(cx, cy, .2) }];
-      for (var k = 1; k <= 5; k++) {
-        var a = a0 + dir * (k * 1.25 + rnd(-.4, .4)), r = D * rnd(.32, .7) * (k === 5 ? .6 : 1);
-        kf.push({ transform: at(cx + Math.cos(a) * r, cy + Math.sin(a) * r, rnd(.75, 1.15)), offset: k / 6.2 });
-      }
-      kf.push({ transform: at(cx, cy, .3) });
-      A(b, kf, { duration: 1300, delay: 450 + s * 55, easing: "ease-in-out" });
-    })(s);
-    // 3. жидкость становится стеклянной каплей
-    A(goo, [{ opacity: 1 }, { opacity: 0 }], { duration: 380, delay: 1880, easing: "ease-in", fill: "forwards" });
-    A(glass, [{ opacity: 0, transform: at(cx, cy, .96, " rotate(0deg)"), borderRadius: "50%" },
-              { opacity: 1, transform: at(cx, cy, 1.04, " rotate(80deg) scale(1.06,.95)"), borderRadius: "48% 52% 46% 54% / 54% 46% 54% 46%", offset: .4 },
-              { opacity: 1, transform: at(cx, cy, 1, " rotate(240deg)"), borderRadius: "50%" }],
-      { duration: 820, delay: 1860, easing: "cubic-bezier(.3,0,.2,1)" });
-    // 4. капля превращается в значок
-    A(svg, [{ opacity: 0, transform: "scale(.35) rotate(-25deg)", filter: "blur(8px)" }, { opacity: 1, transform: "scale(1) rotate(0)", filter: "blur(0)" }],
-      { duration: 620, delay: 2250, easing: SPRING });
-    A(glass, [{ opacity: 1, transform: at(cx, cy, 1, " rotate(240deg)"), borderRadius: "50%" },
-              { opacity: .9, transform: at(cx, cy, (1 + H / D) / 2, " rotate(330deg)"), borderRadius: "34%", offset: .55 },
-              { opacity: 0, transform: at(cx, cy, H / D, " rotate(360deg)"), borderRadius: "27%" }],
-      { duration: 700, delay: 2680, easing: "cubic-bezier(.5,0,.3,1)", fill: "forwards" });
-    // 5. значок уходит влево, буквы MIRSTUDY «капают» из значка, плашка разливается
-    A(ic, [{ transform: "translateX(" + shift + "px)" }, { transform: "translateX(0)" }], { duration: 760, delay: 3350, easing: "cubic-bezier(.34,1.32,.5,1)", fill: "forwards" });
-    later(function () { goo.innerHTML = ""; goo.getAnimations().forEach(function (x) { x.cancel(); }); goo.style.opacity = 1; }, 3300);
-    later(function () {
-      var x0 = icFinal[0] + H * .35, dd = mh * 1.7;
-      mirC.forEach(function (c, i) {
-        var b = blob(dd), del = (i * 55) / S;
-        A(b, [{ transform: at(x0, cy, .3) },
-              { transform: at((x0 + c[0]) / 2, c[1] - H * .45, 1), offset: .55 },
-              { transform: at(c[0], c[1], .95), offset: .82 },
-              { transform: at(c[0], c[1], 0) }], { duration: 600, delay: del, easing: "cubic-bezier(.4,0,.3,1)" });
-        A(mirL[i], [{ opacity: 0, transform: "scale(.2)", filter: "blur(4px)" }, { opacity: 1, transform: "scale(1)", filter: "blur(0)" }],
-          { duration: 480, delay: del + 600 * .74, easing: BOUNCE });
-      });
-      var dc = blob(cr.height * .9);
-      A(dc, [{ transform: at(x0, cy, .3) }, { transform: at(cr.left + cr.height / 2, cr.top + cr.height / 2 + H * .12, 1), offset: .7 },
-             { transform: at(cr.left + cr.height / 2, cr.top + cr.height / 2, .8) }], { duration: 420, delay: 120, easing: "cubic-bezier(.4,0,.3,1)" });
-      var bar = document.createElement("div"); bar.className = "mss-bar"; goo.appendChild(bar);
-      bar.style.cssText = "left:" + (cr.left - gx) + "px;top:" + cr.top + "px;width:" + cr.width + "px;height:" + cr.height + "px;border-radius:" + cr.height / 2 + "px";
-      A(bar, [{ transform: "scale(.08,.6)" }, { transform: "scale(1.04,1.1)", offset: .7 }, { transform: "scale(1)" }], { duration: 600, delay: 480, easing: "cubic-bezier(.3,0,.2,1)" });
-      A(bar, [{ opacity: 1 }, { opacity: 0 }], { duration: 280, delay: 1180, fill: "forwards" });
-      A(chip, [{ opacity: 0, transform: "scale(.97)" }, { opacity: 1, transform: "scale(1)" }], { duration: 300, delay: 1000, easing: "ease-out" });
-      bizL.forEach(function (n, i) {
-        A(n, [{ opacity: 0, transform: "translateY(110%)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 520, delay: 1150 + i * 40, easing: BOUNCE });
-      });
-      later(function () { chip.classList.add("mss-shine"); }, 1500);
-    }, 3400);
+    // 1. чёрная струя: изгибается, но летит к центру; тонкая сверху, у центра — тяжёлая капля
+    var side = Math.random() < .5 ? -1 : 1, sx = cx + side * W * rnd(.1, .2), sy = -30, dx = cx - sx, dy = cy - sy,
+        len = Math.hypot(dx, dy), nx = -dy / len, ny = dx / len, AMP = Math.min(64, W * .085), ph = rnd(0, 6.28), f1 = rnd(1.2, 1.6), f2 = rnd(2.4, 3.1);
+    var R1 = H * .56;
+    var head = snake(g1, function (t) {
+      var u = 1 - Math.pow(1 - t, 2), env = Math.pow(1 - u, 1.15) * Math.min(1, u * 5);
+      var w = (AMP * Math.sin(6.283 * f1 * u + ph) + AMP * .45 * Math.sin(6.283 * f2 * u + ph * 1.7)) * env;
+      return [sx + dx * u + nx * w, sy + dy * u + ny * w];
+    }, function (t) { return 4 + (R1 - 4) * Math.pow(t, 2.4); }, 760, 300, 30, 0);
+    var s1 = 2 * R1 / 64;
+    // 2. капля шлёпается, её закручивает, по ней бежит стеклянный блик
+    A(head, [{ transform: T(g1, cx, cy, s1, " rotate(0deg) scale(1,1)") },
+             { transform: T(g1, cx, cy, s1, " rotate(25deg) scale(1.22,.8)"), offset: .22 },
+             { transform: T(g1, cx, cy, s1, " rotate(80deg) scale(.88,1.12)"), offset: .5 },
+             { transform: T(g1, cx, cy, s1, " rotate(140deg) scale(1.05,.96)"), offset: .76 },
+             { transform: T(g1, cx, cy, s1, " rotate(180deg) scale(1,1)") }],
+      { duration: 520, delay: 760, easing: SOFT, fill: "forwards" });
+    for (var q = 0; q < 4; q++) (function (q) {
+      var b = blob(g1, 64), a = q * 1.57 + rnd(-.4, .4), r = H * rnd(.55, .75), sd = H * rnd(.26, .36) / 64, dir = q % 2 ? 1 : -1;
+      A(b, [{ transform: T(g1, cx, cy, sd * .4) },
+            { transform: T(g1, cx + Math.cos(a) * r, cy + Math.sin(a) * r, sd), offset: .4 },
+            { transform: T(g1, cx + Math.cos(a + dir * 1.4) * r * .6, cy + Math.sin(a + dir * 1.4) * r * .6, sd * .8), offset: .72 },
+            { transform: T(g1, cx, cy, sd * .3) }], { duration: 520, delay: 780 + q * 25, easing: SOFT, fill: "forwards" });
+    })(q);
+    place(glass, R1 * 2); OD = H * 1.08; place(orb, OD);
+    A(glass, [{ opacity: 0, transform: T(ROOT, cx, cy, 1, " rotate(0deg) scale(1,1)") },
+              { opacity: 1, transform: T(ROOT, cx, cy, 1, " rotate(90deg) scale(1.06,.95)"), offset: .5 },
+              { opacity: 1, transform: T(ROOT, cx, cy, 1, " rotate(180deg) scale(1,1)") }], { duration: 380, delay: 880, easing: SOFT });
+    // 3. капля становится значком: квадрат проступает, буква M прорисовывается
+    A(head, [{ transform: T(g1, cx, cy, s1, " rotate(180deg) scale(1,1)"), opacity: 1 }, { transform: T(g1, cx, cy, H * .92 / 64, " rotate(180deg) scale(1,1)"), opacity: 0 }],
+      { duration: 300, delay: 1260, easing: SOFT, fill: "forwards" });
+    A(glass, [{ opacity: 1, transform: T(ROOT, cx, cy, 1, " rotate(180deg) scale(1,1)"), borderRadius: "50%" },
+              { opacity: 0, transform: T(ROOT, cx, cy, H / (R1 * 2), " rotate(360deg) scale(1,1)"), borderRadius: "27%" }],
+      { duration: 420, delay: 1260, easing: SOFT, fill: "forwards" });
+    A(svg, [{ opacity: 0, transform: "scale(.9)" }, { opacity: 1, transform: "scale(1)" }], { duration: 300, delay: 1230, easing: "ease-out" });
+    var Lp = 0; try { Lp = mPath.getTotalLength(); } catch (e) {} if (!Lp) Lp = 90;
+    mPath.style.strokeDasharray = Lp;
+    A(mPath, [{ strokeDashoffset: Lp }, { strokeDashoffset: 0 }], { duration: 440, delay: 1320, easing: "cubic-bezier(.6,0,.3,1)" });
+
+    // 4. слева по горизонтали врезается белая капля
+    var wy = cy + rnd(-.1, .1) * innerHeight, wAmp = Math.min(26, H * .3), wph = rnd(0, 6.28), R2 = H * .32;
+    var whead = snake(g2, function (t) {
+      var u = 1 - Math.pow(1 - t, 1.7), env = Math.pow(1 - u, 1.1) * Math.min(1, u * 4);
+      return [-40 + (cx + 40) * u, wy + (cy - wy) * u + wAmp * Math.sin(6.283 * 1.4 * u + wph) * env];
+    }, function (t) { return 3 + (R2 - 3) * Math.pow(t, 1.6); }, 520, 220, 24, 1500);
+    var hit = 2020;
+    A(svg, [{ transform: "scale(1,1)" }, { transform: "translateX(4%) scale(.88,1.08)", offset: .28 }, { transform: "translateX(0) scale(1.04,.97)", offset: .62 }, { transform: "translateX(0) scale(1,1)" }],
+      { duration: 440, delay: hit, easing: SOFT, fill: "forwards" });
+    A(ic, [{ transform: "translateX(" + shift + "px)" }, { transform: "translateX(0)" }], { duration: 640, delay: hit + 40, easing: "cubic-bezier(.3,1.22,.5,1)", fill: "forwards" });
+    // 5. белая жидкость выходит справа: разливается в плашку, буквы MIRSTUDY «капают» на места
+    var bx = cr.left + cr.height * .5, s2 = 2 * R2 / 64;
+    A(whead, [{ transform: T(g2, cx, cy, s2) }, { transform: T(g2, bx, cc[1], cr.height * 1.05 / 64) }], { duration: 340, delay: hit + 40, easing: "cubic-bezier(.3,0,.2,1)", fill: "forwards" });
+    var bar = document.createElement("div"); bar.className = "mss-bar"; g2.appendChild(bar);
+    bar.style.cssText = "left:" + (cr.left - g2.ox) + "px;top:" + (cr.top - g2.oy) + "px;width:" + cr.width + "px;height:" + cr.height + "px;border-radius:" + cr.height / 2 + "px";
+    bar.style.opacity = 0;
+    A(bar, [{ opacity: 0, transform: "scale(.12,.7)" }, { opacity: 1, transform: "scale(.2,.8)", offset: .08 }, { opacity: 1, transform: "scale(1.03,1.06)", offset: .72 }, { opacity: 1, transform: "scale(1,1)" }],
+      { duration: 460, delay: hit + 260, easing: "cubic-bezier(.3,0,.2,1)", fill: "forwards" });
+    var dd = mh * 1.8 / 64;
+    mirC.forEach(function (c, i) {
+      var b = blob(g2, 64), del = hit + 160 + i * 42;
+      A(b, [{ transform: T(g2, bx, cc[1], dd * .4) },
+            { transform: T(g2, (bx + c[0]) / 2, c[1] - H * .42, dd), offset: .5 },
+            { transform: T(g2, c[0], c[1], dd * .95), offset: .8 },
+            { transform: T(g2, c[0], c[1], 0) }], { duration: 460, delay: del, easing: "cubic-bezier(.4,0,.3,1)", fill: "forwards" });
+      A(mirL[i], [{ opacity: 0, transform: "scale(.3)", filter: "blur(3px)" }, { opacity: 1, transform: "scale(1)", filter: "blur(0)" }],
+        { duration: 400, delay: del + 340, easing: BOUNCE });
+    });
+    A(chip, [{ opacity: 0 }, { opacity: 1 }], { duration: 200, delay: hit + 640, easing: "ease-out" });
+    A(bar, [{ opacity: 1 }, { opacity: 0 }], { duration: 200, delay: hit + 820, fill: "forwards" });
+    A(whead, [{ opacity: 1 }, { opacity: 0 }], { duration: 200, delay: hit + 820, fill: "forwards" });
+    bizL.forEach(function (n, i) {
+      A(n, [{ opacity: 0, transform: "translateY(100%)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 400, delay: hit + 700 + i * 30, easing: BOUNCE });
+    });
+    later(function () { chip.classList.add("mss-shine"); }, hit + 900);
     // 6. всё стекается в одну каплю цветов логотипа
-    later(gather, 5600);
+    ox = icX; oy = cy;
+    later(gather, 3300);
   }
 
   function gather() {
-    goo.innerHTML = ""; goo.getAnimations().forEach(function (x) { x.cancel(); }); goo.style.opacity = 1;
-    var parts = [[ic, H * .95]].concat(mirL.map(function (n) { return [n, n.getBoundingClientRect().height * 1.7]; }), [[chip, chip.getBoundingClientRect().height * 1.2]]);
-    parts.forEach(function (p, i) {
-      var r = p[0].getBoundingClientRect(), c = ctr(r), dist = Math.hypot(c[0] - cx, c[1] - cy), del = (dist / (H * 3)) * 120 / S;
-      var b = blob(p[1]);
-      A(b, [{ transform: at(c[0], c[1], .6) }, { transform: at(c[0], c[1], 1), offset: .2 }, { transform: at(cx, cy, .5) }],
-        { duration: 560, delay: del, easing: "cubic-bezier(.6,0,.4,1)" });
-      A(p[0], [{ opacity: 1, transform: getComputedStyle(p[0]).transform === "none" ? "none" : getComputedStyle(p[0]).transform }, { opacity: 0, transform: "scale(.4)" }],
-        { duration: 180, delay: del + 40, easing: "ease-in", fill: "forwards" });
+    A(orb, [{ opacity: 0, transform: T(ROOT, ox, oy, .93), borderRadius: "27%" }, { opacity: 1, transform: T(ROOT, ox, oy, 1.04), borderRadius: "50%", offset: .6 }, { opacity: 1, transform: T(ROOT, ox, oy, 1), borderRadius: "50%" }],
+      { duration: 340, easing: SOFT, fill: "forwards" });
+    A(ic, [{ opacity: 1 }, { opacity: 0 }], { duration: 220, delay: 60, fill: "forwards" });
+    var parts = mirL.map(function (n) { return [n, n.getBoundingClientRect().height * 1.8]; });
+    parts.push([chip, chip.getBoundingClientRect().height * 1.15]);
+    parts.forEach(function (p) {
+      var r = p[0].getBoundingClientRect(), c = ctr(r), del = Math.max(0, (c[0] - ox) / innerWidth) * 160;
+      var b = blob(g2, 64), s = p[1] / 64;
+      A(b, [{ transform: T(g2, c[0], c[1], s * .7) }, { transform: T(g2, c[0], c[1], s), offset: .18 }, { transform: T(g2, ox, oy, s * .5), offset: .85 }, { transform: T(g2, ox, oy, 0) }],
+        { duration: 420, delay: 40 + del, easing: "cubic-bezier(.55,0,.35,1)", fill: "forwards" });
+      A(p[0], [{ opacity: 1 }, { opacity: 0 }], { duration: 140, delay: 60 + del, fill: "forwards" });
     });
-    var core = blob(D * .9);
-    A(core, [{ transform: at(cx, cy, 0) }, { transform: at(cx, cy, .6, " scale(1.15,.88)"), offset: .5 }, { transform: at(cx, cy, 1) }],
-      { duration: 620, delay: 260, easing: "cubic-bezier(.3,0,.2,1)" });
-    A(orb, [{ opacity: 0, transform: at(cx, cy, .82) }, { opacity: 1, transform: at(cx, cy, 1.04) , offset: .6 }, { opacity: 1, transform: at(cx, cy, 1) }],
-      { duration: 420, delay: 720, easing: "ease-out" });
-    A(goo, [{ opacity: 1 }, { opacity: 0 }], { duration: 260, delay: 900, fill: "forwards" });
-    later(function () { waitApp(performance.now()); }, 1180);
+    A(orb, [{ transform: T(ROOT, ox, oy, 1) }, { transform: T(ROOT, ox, oy, 1.08, " scale(1.06,.95)"), offset: .4 }, { transform: T(ROOT, ox, oy, 1, " scale(1,1)") }],
+      { duration: 300, delay: 430, easing: SOFT, fill: "forwards" });
+    later(function () { waitApp(performance.now()); }, 700);
   }
 
   var started = false, go = function () { if (!started) { started = true; requestAnimationFrame(play); } };
-  try { document.fonts.load('800 20px FigtreeLogo').then(go, go); } catch (e) { go(); }
+  try { Promise.all([document.fonts.load('800 20px FigtreeLogo'), document.fonts.load('900 20px FigtreeLogo')]).then(go, go); } catch (e) { go(); }
   setTimeout(go, 700);
-  setTimeout(finish, 15000);
+  setTimeout(finish, 12000 * S);
 })();
 </script>
 <!--/splash-->
