@@ -67,7 +67,7 @@ a.row:has(>.bw-lock)>svg{width:36px;height:36px}
 .tw-all{display:flex;justify-content:space-between;align-items:baseline;margin-top:10px;padding-top:8px;border-top:1px dashed var(--border);font-size:12.5px;color:var(--text-muted)}
 
 /* ── Калькулятор: плавающее окно, история, память, высокий экран, стыковка с клавиатурой ответа ── */
-.calc-panel{width:min(340px,calc(100vw - 24px));transition:box-shadow .2s}
+.calc-panel{--cz:1;width:min(calc(340px * var(--cz)),calc(100vw - 24px));transition:box-shadow .2s}
 .calc-top{cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none;margin:-6px -6px 0;padding:6px 6px 4px;border-radius:14px}
 .calc-top:hover{background:var(--surface-2)}
 .calc-panel.dragging{box-shadow:0 34px 80px -24px rgba(0,0,0,.6),var(--pop-shadow)}
@@ -97,7 +97,7 @@ a.row:has(>.bw-lock)>svg{width:36px;height:36px}
 .np-pad{transition:transform .46s cubic-bezier(.22,.9,.26,1)}
 @media (min-width:900px){
   body.calc-docked .np-pad{transform:translateX(calc(-100% - 16px))}
-  .calc-panel.docked{top:auto;right:24px;bottom:24px;width:340px;animation:calcDockIn .46s cubic-bezier(.22,.9,.26,1) both}
+  .calc-panel.docked{top:auto;right:24px;bottom:24px;width:calc(340px * var(--cz));animation:calcDockIn .46s cubic-bezier(.22,.9,.26,1) both}
 }
 @media (max-width:899px){
   body.calc-docked .np-pad{transform:translateX(-106%)}
@@ -282,3 +282,28 @@ a.row:has(>.bw-lock)>svg{width:36px;height:36px}
 .ms-tb-moon{transform:none;opacity:1}
 .ms-theme-btn.dark .ms-tb-sun{transform:none;opacity:1}
 .ms-theme-btn.dark .ms-tb-moon{transform:rotate(90deg) scale(.4);opacity:0}
+
+/* Калькулятор: изменение размера за край (компьютер) и корень */
+.calc-panel{gap:calc(8px * var(--cz));padding:calc(12px * var(--cz))}
+.calc-panel .calc-key{height:calc(44px * var(--cz));font-size:calc(18px * var(--cz));border-radius:calc(12px * var(--cz))}
+.calc-panel .calc-key.wide{font-size:calc(14px * var(--cz))}
+.calc-panel .calc-key.mem{font-size:calc(13px * var(--cz))}
+.calc-panel .calc-key.sqrt{font:600 calc(19px * var(--cz)) var(--mono)}
+.calc-panel :is(.calc-grid,.calc-mrow){gap:calc(6px * var(--cz))}
+.calc-mrow{grid-template-columns:repeat(5,1fr)}
+.calc-panel .calc-screen{min-height:calc(104px * var(--cz));padding:calc(8px * var(--cz)) calc(12px * var(--cz))}
+.calc-panel .calc-expr{font-size:calc(24px * var(--cz))}
+.calc-panel .calc-expr.long{font-size:calc(19px * var(--cz))}.calc-panel .calc-expr.xlong{font-size:calc(16px * var(--cz))}
+.calc-panel .calc-res{font-size:calc(14px * var(--cz));min-height:calc(18px * var(--cz))}
+.calc-panel .calc-hist{max-height:calc(300px * var(--cz))}
+.calc-panel .calc-hrow{font-size:calc(13px * var(--cz))}
+.calc-rz{position:absolute;z-index:2;display:block}
+.rz-l{left:-5px;top:16px;bottom:16px;width:10px;cursor:ew-resize}
+.rz-r{right:-5px;top:16px;bottom:16px;width:10px;cursor:ew-resize}
+.rz-b{left:16px;right:16px;bottom:-5px;height:10px;cursor:ns-resize}
+.rz-bl{left:-6px;bottom:-6px;width:18px;height:18px;cursor:nesw-resize}
+.rz-br{right:-6px;bottom:-6px;width:18px;height:18px;cursor:nwse-resize}
+.rz-br::after{content:"";position:absolute;right:9px;bottom:9px;width:9px;height:9px;opacity:.35;border-right:2px solid var(--text-muted);border-bottom:2px solid var(--text-muted);border-radius:0 0 4px 0;transition:opacity .15s}
+.calc-panel:hover .rz-br::after,.calc-panel.resizing .rz-br::after{opacity:.8}
+.calc-panel.resizing{box-shadow:0 0 0 2px color-mix(in srgb,var(--teal) 45%,transparent),var(--pop-shadow);user-select:none;-webkit-user-select:none}
+@media (pointer:coarse),(max-width:760px){.calc-rz{display:none}.calc-panel{--cz:1!important}}

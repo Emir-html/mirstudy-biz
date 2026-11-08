@@ -1,6 +1,6 @@
 // Офлайн-режим сайта «МирСтади · Основы бизнеса»: всё нужное хранится на устройстве после первого открытия.
-const CACHE = "mirstudy-biz-9f91f7be";
-const FILES = ["./", "assets/index-c6f71c6e.css", "assets/index-7715a14d.js", "favicon.svg", "icons/apple-touch-icon.png", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "index.html", "manifest.webmanifest", "tg-web-app.js"];
+const CACHE = "mirstudy-biz-78d4f187";
+const FILES = ["./", "assets/index-20fcae1f.css", "assets/index-688635ef.js", "favicon.svg", "icons/apple-touch-icon.png", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "index.html", "manifest.webmanifest", "tg-web-app.js"];
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES)).then(() => self.skipWaiting()));
 });
