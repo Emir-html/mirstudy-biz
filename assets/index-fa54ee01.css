@@ -226,3 +226,15 @@ a.row:has(>.bw-lock)>svg{width:36px;height:36px}
 :root:not([data-theme=dark])[data-accent=pearl] :is(.card,.tblock,.ms-hero,.ms-stats,.ms-sec,.ms-stat,.tw-side,.dstats>*){background:linear-gradient(var(--surface),var(--surface)) padding-box,linear-gradient(160deg,rgba(0,0,0,.18),rgba(0,0,0,.04) 40%,rgba(0,0,0,.12)) border-box!important;border:1px solid transparent!important}
 :root:not([data-theme=dark])[data-accent=pearl] .ms-hero{background:linear-gradient(135deg,#FFFFFF,#F3F4F6 55%,#ECEEF1) padding-box,linear-gradient(160deg,rgba(0,0,0,.22),rgba(0,0,0,.04) 40%,rgba(0,0,0,.14)) border-box!important}
 :root:not([data-theme=dark])[data-accent=pearl] .grp-chip.on .grp-box{color:#fff}
+
+/* Главная: маленький переключатель светлой/тёмной темы */
+.home-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.ms-theme-btn{flex:none;width:36px;height:36px;margin-top:4px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--text-muted);display:grid;place-items:center;cursor:pointer;overflow:hidden;transition:color .2s,border-color .2s,background .2s,transform .15s}
+.ms-theme-btn:hover{color:var(--text);border-color:color-mix(in srgb,var(--text) 30%,var(--border));background:var(--surface)}
+.ms-theme-btn:active{transform:scale(.92)}
+.ms-tb-in{position:relative;width:16px;height:16px}
+.ms-tb-in svg{position:absolute;inset:0;transition:transform .5s cubic-bezier(.34,1.4,.5,1),opacity .3s}
+.ms-tb-sun{transform:rotate(-90deg) scale(.4);opacity:0}
+.ms-tb-moon{transform:none;opacity:1}
+.ms-theme-btn.dark .ms-tb-sun{transform:none;opacity:1}
+.ms-theme-btn.dark .ms-tb-moon{transform:rotate(90deg) scale(.4);opacity:0}
