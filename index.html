@@ -64,6 +64,8 @@
   --beam:linear-gradient(90deg,rgba(255,255,255,0),rgba(214,219,226,.38) 55%,rgba(255,255,255,.85))}
 #ms-splash .mss-back{position:absolute;inset:0;background:radial-gradient(70% 55% at 50% 48%,var(--sp-glow),transparent 75%),var(--sp-bg)}
 #ms-splash .mss-back::after{content:"";position:absolute;inset:0;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");background-size:160px 160px}
+#ms-splash .mss-ring{position:absolute;left:0;top:0;border-radius:50%;border:1.5px solid rgba(10,10,12,.45);opacity:0;pointer-events:none}
+:root[data-theme=dark] #ms-splash .mss-ring{border-color:rgba(255,255,255,.75)}
 #ms-splash .mss-fx{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;display:block}
 #ms-splash .mss-goo{position:absolute;pointer-events:none}
 #ms-splash .mss-goo canvas{position:absolute;left:0;top:0;width:100%;height:100%}
@@ -100,6 +102,7 @@ html.mss-on .sidebar .logo>*,html.mss-on .topbar a.row>svg,html.mss-on .topbar a
   <div class="mss-back"></div>
   <canvas class="mss-fx"></canvas>
   <div class="mss-world">
+    <div class="mss-ring"></div><div class="mss-ring"></div>
     <div class="mss-goo mss-goo1"></div>
     <div class="mss-goo mss-goo2"></div>
     <div class="mss-stage"><div class="mss-grp">
@@ -323,48 +326,59 @@ html.mss-on .sidebar .logo>*,html.mss-on .topbar a.row>svg,html.mss-on .topbar a
     requestAnimationFrame(loop);
     OD = H * 1.12; orb.style.width = orb.style.height = OD + "px"; orb.style.marginLeft = orb.style.marginTop = (-OD / 2) + "px";
 
-    // 1. чёрная струя: изгибается, но летит к месту значка
-    var side = Math.random() < .5 ? -1 : 1, sx = icX + side * W * rnd(.08, .15), sy = -30, dx = icX - sx, dy = cy - sy,
-        len = Math.hypot(dx, dy), nx = -dy / len, ny = dx / len, AMP = Math.min(58, W * .08), ph = rnd(0, 6.28), f1 = rnd(1.2, 1.6), f2 = rnd(2.4, 3.1);
+    // 1. чёрная капля падает с ускорением (как под тяжестью), чуть изгибаясь — не плывёт, а летит
+    var hit = 420;
+    var side = Math.random() < .5 ? -1 : 1, sx = icX + side * W * rnd(.07, .13), sy = -40, dx = icX - sx, dy = cy - sy,
+        len = Math.hypot(dx, dy), nx = -dy / len, ny = dx / len, AMP = Math.min(46, W * .065), ph = rnd(0, 6.28), f1 = rnd(1.1, 1.5), f2 = rnd(2.3, 3);
     var head = snake(g1, function (t) {
-      var u = 1 - Math.pow(1 - t, 2), env = Math.pow(1 - u, 1.15) * Math.min(1, u * 5);
-      var w = (AMP * Math.sin(6.283 * f1 * u + ph) + AMP * .45 * Math.sin(6.283 * f2 * u + ph * 1.7)) * env;
+      var u = Math.pow(t, 1.55), env = Math.pow(1 - u, 1.2) * Math.min(1, u * 6);
+      var w = (AMP * Math.sin(6.283 * f1 * u + ph) + AMP * .4 * Math.sin(6.283 * f2 * u + ph * 1.7)) * env;
       return [sx + dx * u + nx * w, sy + dy * u + ny * w];
-    }, function (t) { return 4 + (R1 - 4) * Math.pow(t, 2.3); }, 480, 190, 72, 0);
-    // посадка капли: короткое вертикальное «шлёп»
-    A(head, frames(140, 28, function (tt) { var e = Math.exp(-tt / 60), c = Math.cos(2 * Math.PI * tt / 100);
-      return { transform: T(g1, icX, cy, s1, " translate(0px,0px) rotate(0deg) scale(" + (1 + .14 * e * c) + "," + (1 - .18 * e * c) + ")") }; }),
-      { duration: 140, delay: 480, easing: "linear", fill: "forwards" });
+    }, function (t) { return 4 + (R1 - 4) * Math.pow(t, 1.9); }, hit, 150, 72, 0);
 
-    // 2. белая капля на полной скорости бьёт слева, проходит насквозь и тормозит у надписи
-    var ws = 330, WD = 440, tc = .52, x0 = -70, xc = icX - R1 * .85, xEnd = cr.left + cr.height * .5;
-    var y0 = cy + rnd(-.07, .07) * innerHeight, R2 = H * .3;
-    var v = 1.6 * (xc - x0) / tc, dx2 = xEnd - xc, kk = Math.max(1.2, Math.min(5, v * (1 - tc) / dx2));
-    var wx = function (t) { if (t < tc) return x0 + (xc - x0) * Math.pow(t / tc, 1.6); var s = (t - tc) / (1 - tc); return xc + dx2 * (1 - Math.pow(1 - s, kk)); };
+    // 2. навстречу — белая капля слева на полной скорости; встречаются в одну и ту же секунду
+    var WD = 340, tc = .56, ws = hit - tc * WD, x0 = -80, xc = icX - R1 * .85, xEnd = cr.left + cr.height * .5;
+    var y0 = cy + rnd(-.06, .06) * innerHeight, R2 = H * .3;
+    var v = 2.1 * (xc - x0) / tc, dx2 = xEnd - xc, kk = Math.max(1.2, Math.min(5, v * (1 - tc) / dx2));
+    var wx = function (t) { if (t < tc) return x0 + (xc - x0) * Math.pow(t / tc, 2.1); var s = (t - tc) / (1 - tc); return xc + dx2 * (1 - Math.pow(1 - s, kk)); };
     var wyf = function (t) { if (t < tc) { var u = t / tc; return y0 + (cy - y0) * (1 - Math.pow(1 - u, 2)); } var s = (t - tc) / (1 - tc); return cy + (cc[1] - cy) * (1 - Math.pow(1 - s, 2)); };
-    var whead = snake(g2, function (t) { return [wx(t), wyf(t)]; }, function (t) { return 3 + (R2 - 3) * Math.min(1, t * 2.2); }, WD, 130, 48, ws);
-    var hit = ws + tc * WD, tex = tc;
+    var whead = snake(g2, function (t) { return [wx(t), wyf(t)]; }, function (t) { return 3 + (R2 - 3) * Math.min(1, t * 1.7); }, WD, 120, 48, ws, "", .82);
+    var tex = tc;
     for (var j = 0; j <= 200; j++) { if (wx(tc + (1 - tc) * j / 200) >= icX + R1 * .75) { tex = tc + (1 - tc) * j / 200; break; } }
-    var exitT = ws + tex * WD;
-    // удар: сжатие, отдача вправо, затухающие колебания
+    var exitT = ws + tex * WD, cx0 = icX - R1 * .8;
+    // удар: сжатие, отдача вправо-вниз (капля ещё летела вниз), затухающие колебания и мелкая дрожь
     var jig = function (tt) {
-      var e = Math.exp(-tt / 150), c = Math.cos(2 * Math.PI * tt / 100), tx = R1 * .28 * (tt / 45) * Math.exp(1 - tt / 45);
-      return { e: e, sx: 1 - .36 * e * c, sy: 1 + .28 * e * c, tx: tx + 5 * e * Math.sin(2 * Math.PI * tt / 36), ty: 3.5 * e * Math.cos(2 * Math.PI * tt / 44), rot: 9 * e * Math.sin(2 * Math.PI * tt / 140) };
+      var e = Math.exp(-tt / 160), c = Math.cos(2 * Math.PI * tt / 95), ph1 = (tt / 40) * Math.exp(1 - tt / 40);
+      return { e: e, sx: 1 - .42 * e * c, sy: 1 + .32 * e * c, tx: R1 * .32 * ph1 + 6 * e * Math.sin(2 * Math.PI * tt / 34), ty: R1 * .16 * ph1 + 4 * e * Math.cos(2 * Math.PI * tt / 42), rot: 11 * e * Math.sin(2 * Math.PI * tt / 130) };
     };
-    A(head, frames(600, 128, function (tt) { var j = jig(tt);
+    A(head, frames(640, 140, function (tt) { var j = jig(tt);
       return { transform: T(g1, icX, cy, s1, " translate(" + (j.tx / s1) + "px," + (j.ty / s1) + "px) rotate(" + j.rot + "deg) scale(" + j.sx + "," + j.sy + ")") };
-    }), { duration: 600, delay: hit, easing: "linear", fill: "forwards" });
-    A(world, frames(320, 64, function (tt) { var e = Math.exp(-tt / 90); return { transform: "translate(" + (7 * e * Math.sin(2 * Math.PI * tt / 52)) + "px," + (4 * e * Math.cos(2 * Math.PI * tt / 66)) + "px)" }; }),
-      { duration: 320, delay: hit, easing: "linear", fill: "forwards" });
-    // разрыв справа: чёрные брызги вылетают и стягиваются обратно
-    for (var q = 0; q < 6; q++) (function (q) {
-      var b = blob(g1, 64), a = rnd(-.9, .9), dist = R1 * rnd(.7, 1.4), sd = H * rnd(.1, .2) / 64, bx0 = icX + R1 * .7 * Math.cos(a), by0 = cy + R1 * .7 * Math.sin(a);
-      A(b, [{ transform: T(g1, bx0, by0, sd * .6) },
-            { transform: T(g1, bx0 + Math.cos(a) * dist, by0 + Math.sin(a) * dist + 6, sd), offset: .38 },
-            { transform: T(g1, icX + R1 * .3, cy, sd * .4), offset: .85 }, { transform: T(g1, icX + R1 * .2, cy, 0) }], { duration: 360, delay: exitT - 20 + q * 8, easing: "cubic-bezier(.2,.7,.4,1)", fill: "forwards" });
-    })(q);
+    }), { duration: 640, delay: hit, easing: "linear", fill: "forwards" });
+    // сотрясение всей сцены
+    A(world, frames(420, 84, function (tt) { var e = Math.exp(-tt / 110); return { transform: "translate(" + (12 * e * Math.sin(2 * Math.PI * tt / 48)) + "px," + (7 * e * Math.cos(2 * Math.PI * tt / 61)) + "px)" }; }),
+      { duration: 420, delay: hit, easing: "linear", fill: "forwards" });
+    // ударная волна: два тонких кольца от точки столкновения
+    $$(".mss-ring").forEach(function (r, i) {
+      var d = R1 * 2; r.style.width = r.style.height = d + "px"; r.style.marginLeft = r.style.marginTop = (-d / 2) + "px";
+      A(r, [{ opacity: .9, transform: "translate(" + cx0 + "px," + cy + "px) scale(.25)" }, { opacity: 0, transform: "translate(" + cx0 + "px," + cy + "px) scale(" + (2.6 + i * 1.3) + ")" }],
+        { duration: 420 + i * 140, delay: hit + i * 55, easing: "cubic-bezier(.1,.7,.3,1)", fill: "forwards" });
+    });
+    // брызги: полёт с сопротивлением воздуха и гравитацией, капли тают к концу
+    function spray(box, n, x0, y0, a0, spread, v0, v1, d0, d1, delay) {
+      for (var i = 0; i < n; i++) (function () {
+        var b = blob(box, 64), a = a0 + rnd(-spread, spread), sp = rnd(v0, v1), life = rnd(300, 520), d = rnd(d0, d1) / 64, tau = rnd(120, 210), gr = .0012;
+        A(b, frames(life, 48, function (tt, p) {
+          var k = tau * (1 - Math.exp(-tt / tau)), x = x0 + Math.cos(a) * sp * k, y = y0 + Math.sin(a) * sp * k + .5 * gr * tt * tt;
+          return { transform: T(box, x, y, d * Math.min(1, p / .06) * (1 - Math.pow(p, 2.2))) };
+        }), { duration: life, delay: delay + rnd(0, 24), easing: "linear", fill: "forwards" });
+      })();
+    }
+    spray(g2, 14, cx0, cy, Math.PI, 1.25, .45, 1.3, H * .07, H * .18, hit);          // белое — отскок назад, вверх и вниз
+    spray(g1, 12, icX, cy, 0, Math.PI, .4, 1.05, H * .07, H * .17, hit + 8);           // чёрное — во все стороны
+    spray(g2, 16, icX + R1 * .8, cy, 0, .95, .8, 1.9, H * .06, H * .16, exitT);        // белый веер из разрыва справа
+    spray(g1, 8, icX + R1 * .7, cy, 0, 1.1, .6, 1.4, H * .06, H * .15, exitT - 10);    // чёрные осколки из разрыва
     // 3. чёрная капля становится значком (колебание продолжается уже на значке)
-    var icT = exitT + 40, dT = icT - hit;
+    var icT = hit + 240, dT = icT - hit;
     A(head, [{ transform: T(g1, icX, cy, s1), opacity: 1 }, { transform: T(g1, icX, cy, H * .9 / 64), opacity: 0 }], { duration: 200, delay: icT, easing: SOFT, fill: "forwards" });
     A(svg, frames(640, 128, function (tt, p) {
       var j = jig(tt + dT), big = 1 + .14 * Math.exp(-tt / 90);
@@ -375,28 +389,28 @@ html.mss-on .sidebar .logo>*,html.mss-on .topbar a.row>svg,html.mss-on .topbar a
     A(mPath, [{ strokeDashoffset: Lp, opacity: 0 }, { strokeDashoffset: Lp * .97, opacity: 1, offset: .04 }, { strokeDashoffset: 0, opacity: 1 }], { duration: 300, delay: icT + 110, easing: "cubic-bezier(.6,0,.3,1)" });
 
     // 4. белая жидкость разливается в плашку, буквы MIRSTUDY вылетают из неё каплями
-    var barStart = ws + WD - 50, BD = 300;
+    var barStart = ws + WD - 40, BD = 260;
     var bar = document.createElement("div"); bar.className = "mss-bar"; g2.appendChild(bar);
     bar.style.cssText = "left:" + (cr.left - g2.ox) + "px;top:" + (cr.top - g2.oy) + "px;width:" + cr.width + "px;height:" + cr.height + "px;border-radius:" + cr.height / 2 + "px;opacity:0";
-    A(bar, [{ opacity: 1, transform: "scale(.14,.8)" }, { opacity: 1, transform: "scale(1.03,1.06)", offset: .75 }, { opacity: 1, transform: "scale(1,1)" }],
+    A(bar, [{ opacity: 1, transform: "scale(.14,.8)" }, { opacity: 1, transform: "scale(1.04,1.08)", offset: .72 }, { opacity: 1, transform: "scale(1,1)" }],
       { duration: BD, delay: barStart, easing: "cubic-bezier(.22,.9,.3,1)", fill: "forwards" });
     mirC.forEach(function (c, i) {
-      var s = Math.max(.03, Math.min(1, (c[0] - cr.left) / cr.width)), launch = barStart + BD * .55 * (1 - Math.cbrt(1 - s)), b = blob(g2, 64), dd = mh * 1.8 / 64;
-      A(b, [{ transform: T(g2, c[0], cr.top + cr.height * .3, dd * .4) },
-            { transform: T(g2, c[0] + 2, c[1] - mh * .45, dd), offset: .6 },
-            { transform: T(g2, c[0], c[1], dd * .8), offset: .82 },
-            { transform: T(g2, c[0], c[1], 0) }], { duration: 280, delay: launch, easing: "cubic-bezier(.3,.6,.4,1)", fill: "forwards" });
+      var b = blob(g2, 64), dd = mh * 1.3 / 64, xs = icX + R1 * .75, ys = cy + rnd(-.2, .2) * R1, del = exitT + i * 26, dur = 300 + i * 14, peak = Math.min(ys, c[1]) - H * rnd(.3, .55);
+      A(b, frames(dur, 48, function (tt, p) {
+        var q = 1 - Math.pow(1 - p, 1.6), x = xs + (c[0] - xs) * q, y = (1 - q) * (1 - q) * ys + 2 * q * (1 - q) * peak + q * q * c[1];
+        return { transform: T(g2, x, y, dd * (p < .1 ? .5 + 5 * p : p > .82 ? Math.max(0, 1 - (p - .82) / .18) : 1)) };
+      }), { duration: dur, delay: del, easing: "linear", fill: "forwards" });
       A(mirL[i], [{ opacity: 0, transform: "scale(.3)", filter: "blur(3px)" }, { opacity: 1, transform: "scale(1)", filter: "blur(0)" }],
-        { duration: 300, delay: launch + 190, easing: BOUNCE });
+        { duration: 280, delay: del + dur * .8, easing: BOUNCE });
     });
     A(chip, [{ opacity: 0 }, { opacity: 1 }], { duration: 140, delay: barStart + BD - 20, easing: "ease-out" });
     A(bar, [{ opacity: 1 }, { opacity: 0 }], { duration: 140, delay: barStart + BD + 100, fill: "forwards" });
-    A(whead, [{ opacity: 1 }, { opacity: 0 }], { duration: 140, delay: barStart + BD + 100, fill: "forwards" });
+    A(whead, [{ opacity: 1 }, { opacity: 0 }], { duration: 120, delay: barStart + BD - 60, fill: "forwards" });
     bizL.forEach(function (n, i) {
       A(n, [{ opacity: 0, transform: "translateY(100%)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 300, delay: barStart + BD - 40 + i * 22, easing: BOUNCE });
     });
     later(function () { chip.classList.add("mss-shine"); }, barStart + BD + 160);
-    later(function () { merge(icX, cr, mh); }, barStart + BD + 520);
+    later(function () { merge(icX, cr, mh); }, barStart + BD + 460);
   }
 
   // 5. всё сливается в одну переливающуюся каплю
