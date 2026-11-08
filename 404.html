@@ -96,6 +96,9 @@
 #ms-splash .mss-lock .brand-biz,#ms-splash .mss-lock .brand-mir i{opacity:0}
 #ms-splash .mss-lock .brand-biz::after{animation:none!important;left:-60%}
 #ms-splash .mss-lock .brand-biz.mss-shine::after{animation:bw-sheen-h .8s cubic-bezier(.22,.61,.36,1) 1 both!important}
+#ms-splash{--mss-g1:#7E8896;--mss-g2:#C9D0DA}
+:root[data-theme=dark] #ms-splash{--mss-g1:#A9B8FF;--mss-g2:#FFD6F2}
+#ms-splash .mss-lock.mss-glint .brand-mir i{background-image:linear-gradient(100deg,var(--bw-t1) 0%,var(--bw-t1) 35%,var(--mss-g1) 44%,var(--mss-g2) 50%,var(--mss-g1) 56%,var(--bw-t1) 65%,var(--bw-t1) 100%)!important;background-size:300% 100%!important;background-position:100% 0;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;color:transparent!important}
 html.mss-on .sidebar .logo>*,html.mss-on .topbar a.row>svg,html.mss-on .topbar a.row>.brand{visibility:hidden}
 </style>
 <div id="ms-splash" aria-hidden="true">
@@ -410,7 +413,21 @@ html.mss-on .sidebar .logo>*,html.mss-on .topbar a.row>svg,html.mss-on .topbar a
       A(n, [{ opacity: 0, transform: "translateY(100%)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 300, delay: barStart + BD - 40 + i * 22, easing: BOUNCE });
     });
     later(function () { chip.classList.add("mss-shine"); }, barStart + BD + 160);
-    later(function () { merge(icX, cr, mh); }, barStart + BD + 1960);
+    later(function () {
+      // пока надпись держится — перелив по буквам, лёгкая волна и блик на плашке
+      var lk = el.querySelector(".mss-lock"); lk.classList.add("mss-glint");
+      mirL.forEach(function (n, i) {
+        try { n.animate([{ backgroundPosition: "100% 0" }, { backgroundPosition: "0% 0" }], { duration: 720 * S, delay: i * 40 * S, easing: "cubic-bezier(.45,.05,.35,1)", fill: "both" }); } catch (e) {}
+        try { n.animate([{ transform: "translateY(0)" }, { transform: "translateY(-9%)", offset: .45 }, { transform: "translateY(0)" }], { duration: 560 * S, delay: (60 + i * 40) * S, easing: "ease-in-out" }); } catch (e) {}
+      });
+      bizL.forEach(function (n, i) {
+        try { n.animate([{ transform: "translateY(0)" }, { transform: "translateY(-12%)", offset: .45 }, { transform: "translateY(0)" }], { duration: 460 * S, delay: (240 + i * 36) * S, easing: "ease-in-out" }); } catch (e) {}
+      });
+      var gl = Math.round(H * .14);
+      try { svg.animate([{ filter: "drop-shadow(0 0 0px rgba(170,190,255,0))" }, { filter: "drop-shadow(0 0 " + gl + "px rgba(170,190,255,.6))", offset: .5 }, { filter: "drop-shadow(0 0 0px rgba(170,190,255,0))" }], { duration: 900 * S, easing: "ease-in-out" }); } catch (e) {}
+      chip.classList.remove("mss-shine"); void chip.offsetWidth; chip.classList.add("mss-shine");
+    }, barStart + BD + 420);
+    later(function () { merge(icX, cr, mh); }, barStart + BD + 1460);
   }
 
   // 5. всё сливается в одну переливающуюся каплю
