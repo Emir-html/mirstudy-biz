@@ -197,3 +197,10 @@ a.row:has(>.bw-lock)>svg{width:36px;height:36px}
 .grp-chip.on .grp-box{background:var(--sage);border-color:var(--sage);color:var(--cta-text,#0b0b0b)}
 .grp-chip:hover{border-color:color-mix(in srgb,var(--sage) 60%,var(--border))}
 .grp-empty{font-size:13.5px;color:var(--text-muted);padding:10px 4px;margin:0}
+
+/* Формула и пример — раздельно */
+.lb-f-k,.lb-fex-k{display:block;font:700 10.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.lb-f-k{color:color-mix(in srgb,var(--amber) 80%,var(--text))}
+.lb-fex{border-top:1px dashed var(--border);padding:12px 16px 14px;background:color-mix(in srgb,var(--surface-2) 70%,transparent)}
+.lb-fex-k{display:inline-block;padding:4px 8px;border-radius:6px;background:var(--surface);border:1px solid var(--border);color:var(--text-muted);margin-bottom:9px}
+.lb-fex-b{font:500 13px/1.6 var(--mono);color:var(--text-muted);white-space:pre-wrap}
