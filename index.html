@@ -63,18 +63,13 @@
   --liq1:radial-gradient(circle at 34% 28%,#8A9099 0,#2A2D33 42%,#0A0A0A 82%);--liq2:linear-gradient(180deg,#FFF 0%,#E6E9ED 45%,#B4BAC3 100%);
   --beam:linear-gradient(90deg,rgba(255,255,255,0),rgba(214,219,226,.38) 55%,rgba(255,255,255,.85))}
 #ms-splash .mss-back{position:absolute;inset:0;background:radial-gradient(55% 42% at 50% 50%,var(--sp-glow),transparent 72%),var(--sp-bg)}
-#ms-splash .mss-blob{position:absolute;width:46vmax;height:46vmax;border-radius:50%;background:var(--sp-blob);filter:blur(70px);opacity:0}
+#ms-splash .mss-blob{position:absolute;width:60vmax;height:60vmax;border-radius:50%;background:radial-gradient(circle,var(--sp-blob) 0,transparent 68%);opacity:0}
+#ms-splash .mss-goo{position:absolute;pointer-events:none}
+#ms-splash .mss-goo canvas{position:absolute;left:0;top:0;width:100%;height:100%}
+#ms-splash .mss-g,#ms-splash .mss-bar{position:absolute;left:0;top:0;visibility:hidden}
+#ms-splash .mss-bar{transform-origin:0 50%}
 #ms-splash .mss-b1{left:-12vmax;top:-14vmax}#ms-splash .mss-b2{right:-14vmax;bottom:-16vmax}
 #ms-splash .mss-world{position:absolute;inset:0}
-#ms-splash .mss-goo{position:absolute;pointer-events:none;filter:url(#mss-goo)}
-:root[data-theme=dark] #ms-splash .mss-goo1{filter:url(#mss-goo) drop-shadow(0 0 1px rgba(255,255,255,.95)) drop-shadow(0 0 10px rgba(255,255,255,.24))}
-:root:not([data-theme=dark]) #ms-splash .mss-goo1{filter:url(#mss-goo) drop-shadow(0 6px 12px rgba(0,0,0,.28))}
-#ms-splash .mss-goo2{filter:url(#mss-goo) drop-shadow(0 6px 14px rgba(0,0,0,.35))}
-#ms-splash .mss-g{position:absolute;left:0;top:0;border-radius:50%;will-change:transform;background:var(--liq2)}
-#ms-splash .mss-goo1 .mss-g,#ms-splash .mss-g.k{background:var(--liq1)}
-#ms-splash .mss-goo3 .mss-g{background:#060607}
-:root[data-theme=dark] #ms-splash .mss-goo3{filter:url(#mss-goo) drop-shadow(0 0 1px rgba(255,255,255,.75)) drop-shadow(0 0 8px rgba(255,255,255,.14))}
-#ms-splash .mss-bar{position:absolute;transform-origin:0 50%;background:var(--liq2)}
 #ms-splash .mss-stage{position:absolute;inset:0;display:grid;place-items:center}
 #ms-splash .mss-grp{position:relative;display:flex;align-items:center;gap:calc(var(--H)*.3)}
 #ms-splash .mss-ic{position:relative;z-index:3;width:var(--H);height:var(--H);flex:none}
@@ -98,7 +93,6 @@
 html.mss-on .sidebar .logo>*,html.mss-on .topbar a.row>svg,html.mss-on .topbar a.row>.brand{visibility:hidden}
 </style>
 <div id="ms-splash" aria-hidden="true">
-  <svg width="0" height="0" style="position:absolute"><filter id="mss-goo" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceGraphic" stdDeviation="6" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -10"/></filter></svg>
   <div class="mss-back"><div class="mss-blob mss-b1"></div><div class="mss-blob mss-b2"></div></div>
   <div class="mss-world">
     <div class="mss-goo mss-goo1"></div>
@@ -160,7 +154,7 @@ html.mss-on .sidebar .logo>*,html.mss-on .topbar a.row>svg,html.mss-on .topbar a
         var t = now - t0;
         for (var i = 0; i < n; i++) {
           var ti = (t - i * L / n) / D, c = Math.max(0, Math.min(1, ti)), p = path(c);
-          var r = ti <= 0 ? 0 : rad(byHead ? Math.max(0, Math.min(1, t / D)) : c) * (1 - taper * i / n);
+          var r = ti <= 0 || (i > 0 && ti >= 1) ? 0 : rad(byHead ? Math.max(0, Math.min(1, t / D)) : c) * (1 - taper * i / n);
           segs[i].style.transform = T(box, p[0], p[1], 2 * r / d);
         }
         if (t < D + L) requestAnimationFrame(frame);
@@ -169,6 +163,138 @@ html.mss-on .sidebar .logo>*,html.mss-on .topbar a.row>svg,html.mss-on .topbar a
     }, delay);
     return segs[0];
   }
+
+  // ── Жидкость рисуем сами на canvas: поле «метаболов» + блик, свечение края, сглаживание.
+  // Одинаково в любом браузере (SVG-фильтры на iPhone/в Telegram тормозили и рассыпались на кружки).
+  var DARK = root.getAttribute("data-theme") === "dark", SC = (window.devicePixelRatio || 1) >= 2 ? (innerWidth < 700 ? 1.25 : 1.5) : 1, TH = .5625;
+  var LX = -.45, LY = -.62, LZ = .64, HX = LX, HY = LY, HZ = LZ + 1, HN = Math.hypot(HX, HY, HZ); HX /= HN; HY /= HN; HZ /= HN;
+  var layers = [];
+  function Layer(box, black) {
+    this.box = box; this.black = black; this.c = document.createElement("canvas"); box.appendChild(this.c);
+    this.pb = null; layers.push(this);
+  }
+  Layer.prototype.fit = function () {
+    if (this.g === undefined) this.initGL();
+    var sc = this.sc = this.g ? Math.min(2, window.devicePixelRatio || 1) : SC;
+    var w = Math.max(1, Math.ceil(this.box.offsetWidth * sc)), h = Math.max(1, Math.ceil(this.box.offsetHeight * sc));
+    this.c.width = this.w = w; this.c.height = this.h = h;
+    this.ok = true; this.pb = null; if (this.g) return;
+    this.F = new Float32Array(w * h); this.C = new Float32Array(w * h); this.O = new Float32Array(w * h);
+    if (!this.ctx) this.ctx = this.c.getContext("2d"); this.img = this.ctx.createImageData(w, h);
+  };
+  var MRE = /matrix\(([^)]+)\)/;
+  // ── GPU-версия того же рисования (WebGL2): полное разрешение, кадры не проседают
+  var VS = "#version 300 es\nin vec2 a;void main(){gl_Position=vec4(a,0.,1.);}";
+  var FS = "#version 300 es\nprecision highp float;uniform sampler2D uT;uniform int uN;uniform float uSc,uH,uDark;uniform vec4 uCap;uniform vec2 uCapC;out vec4 o;" +
+    "void main(){vec2 p=vec2(gl_FragCoord.x,uH-gl_FragCoord.y)/uSc;float F=0.,C=0.,O=0.;vec2 G=vec2(0.);" +
+    "for(int i=0;i<256;i++){if(i>=uN)break;vec4 a=texelFetch(uT,ivec2(i,0),0);vec4 b=texelFetch(uT,ivec2(i,1),0);vec2 d=p-a.xy;vec2 q=vec2(b.x*d.x+b.y*d.y,b.z*d.x+b.w*d.y);float r2=dot(q,q);" +
+    "if(r2<4.){float t=1.-.25*r2;float k=t*t;F+=k;C+=k*a.z;O+=k*a.w;G-=t*(q.x*b.xy+q.y*b.zw);}}" +
+    "if(uCap.w>0.){float px=clamp(p.x,uCap.x,uCap.y);vec2 d=vec2(p.x-px,p.y-uCap.z)/uCap.w;float r2=dot(d,d);if(r2<4.){float t=1.-.25*r2;float k=t*t;F+=k;C+=k*uCapC.x;O+=k*uCapC.y;G-=t*d/uCap.w;}}" +
+    "const float TH=.5625;if(F<TH*.5){o=vec4(0.);return;}float g=length(G)+1e-5;float w=max(.012,g*.75/uSc);float al=smoothstep(TH-w,TH+w,F);if(al<=0.){o=vec4(0.);return;}" +
+    "float l=C/F,op=O/F,ed=clamp(1.-(F-TH)/.75,0.,1.);vec2 n2=-G/g*ed*.93;float nz=sqrt(max(0.,1.-dot(n2,n2)));vec3 n=vec3(n2,nz);" +
+    "vec3 L=normalize(vec3(-.45,-.62,.64));vec3 Hh=normalize(L+vec3(0.,0.,1.));float ndl=dot(n,L);float sp=pow(max(dot(n,Hh),0.),26.);float rim=(1.-nz);rim*=rim;" +
+    "float v=(8.+240.*l)*(.8+.22*ndl)/255.;float rs=uDark>.5?.9-.55*l:.3;float rc=uDark>.5?1.:(l>.5?.47:.27);v=v*(1.-rim*rs)+rc*rim*rs+sp*(uDark>.5?.94:.78);v=clamp(v,0.,1.);" +
+    "float A=al*op;o=vec4(clamp(vec3(v-.008,v-.004,v+.008),0.,1.)*A,A);}";
+  Layer.prototype.initGL = function () {
+    try {
+      var g = this.c.getContext("webgl2", { premultipliedAlpha: true, alpha: true, antialias: false, depth: false, stencil: false });
+      if (!g) return false;
+      var sh = function (t, src) { var x = g.createShader(t); g.shaderSource(x, src); g.compileShader(x); if (!g.getShaderParameter(x, g.COMPILE_STATUS)) throw g.getShaderInfoLog(x); return x; };
+      var pr = g.createProgram(); g.attachShader(pr, sh(g.VERTEX_SHADER, VS)); g.attachShader(pr, sh(g.FRAGMENT_SHADER, FS)); g.linkProgram(pr);
+      if (!g.getProgramParameter(pr, g.LINK_STATUS)) throw "link";
+      g.useProgram(pr);
+      var vb = g.createBuffer(); g.bindBuffer(g.ARRAY_BUFFER, vb); g.bufferData(g.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), g.STATIC_DRAW);
+      var al = g.getAttribLocation(pr, "a"); g.enableVertexAttribArray(al); g.vertexAttribPointer(al, 2, g.FLOAT, false, 0, 0);
+      var tx = g.createTexture(); g.bindTexture(g.TEXTURE_2D, tx);
+      g.texParameteri(g.TEXTURE_2D, g.TEXTURE_MIN_FILTER, g.NEAREST); g.texParameteri(g.TEXTURE_2D, g.TEXTURE_MAG_FILTER, g.NEAREST);
+      g.texImage2D(g.TEXTURE_2D, 0, g.RGBA32F, 256, 2, 0, g.RGBA, g.FLOAT, null);
+      this.g = g; this.buf = new Float32Array(256 * 2 * 4);
+      this.u = {}; var self = this; ["uT", "uN", "uSc", "uH", "uDark", "uCap", "uCapC"].forEach(function (n) { self.u[n] = g.getUniformLocation(pr, n); });
+      g.uniform1i(this.u.uT, 0); g.uniform1f(this.u.uDark, DARK ? 1 : 0); g.clearColor(0, 0, 0, 0);
+      return true;
+    } catch (e) { this.g = null; return false; }
+  };
+  Layer.prototype.draw = function () {
+    if (!this.ok) return;
+    if (!this.g) return this.drawCPU();
+    var g = this.g, B = this.buf, n = 0, cap = null, els = this.box.querySelectorAll(".mss-g,.mss-bar"), bx = [1e9, 1e9, -1e9, -1e9];
+    var grow = function (x, y, r) { if (x - r < bx[0]) bx[0] = x - r; if (y - r < bx[1]) bx[1] = y - r; if (x + r > bx[2]) bx[2] = x + r; if (y + r > bx[3]) bx[3] = y + r; };
+    for (var k = 0; k < els.length && n < 256; k++) {
+      var e = els[k]; if (e.style.transform === "scale(0)" && !e.getAnimations().length) continue;
+      var cs = getComputedStyle(e), op = +cs.opacity; if (!(op > .01)) continue;
+      var mm = MRE.exec(cs.transform); if (!mm) continue; var M = mm[1].split(",").map(Number);
+      var col = (this.black || e.classList.contains("k") || e.classList.contains("k2")) ? 0 : 1;
+      if (e.classList.contains("mss-bar")) {
+        var bw = e.offsetWidth, bh = e.offsetHeight, rr = bh * M[3] / 2; if (rr < .3) continue;
+        var left = e.offsetLeft, xa = left + rr; cap = [xa, Math.max(xa, left + bw * M[0] - rr), e.offsetTop + bh / 2, rr, col, op]; grow(cap[0], cap[2], 2 * rr); grow(cap[1], cap[2], 2 * rr); continue;
+      }
+      var a = M[0], b = M[1], c = M[2], d = M[3], det = a * d - b * c; if (Math.abs(det) < 1e-6) continue;
+      var rad = (e._d || (e._d = e.offsetWidth)) / 2; if (rad * Math.sqrt(Math.abs(det)) < .2) continue;
+      var o0 = n * 4, o1 = (256 + n) * 4;
+      B[o0] = M[4]; B[o0 + 1] = M[5]; B[o0 + 2] = col; B[o0 + 3] = op;
+      B[o1] = d / det / rad; B[o1 + 1] = -c / det / rad; B[o1 + 2] = -b / det / rad; B[o1 + 3] = a / det / rad;
+      grow(M[4], M[5], 2 * rad * Math.max(Math.hypot(a, b), Math.hypot(c, d)) + 2);
+      n++;
+    }
+    if (!n && !cap && !this.drew) return;
+    g.viewport(0, 0, this.w, this.h); g.disable(g.SCISSOR_TEST); g.clear(g.COLOR_BUFFER_BIT); this.drew = !!(n || cap);
+    if (!this.drew) return;
+    // считаем только прямоугольник, где есть жидкость
+    var sc = this.sc, x0 = Math.max(0, Math.floor(bx[0] * sc)), x1 = Math.min(this.w, Math.ceil(bx[2] * sc)), y0 = Math.max(0, Math.floor(bx[1] * sc)), y1 = Math.min(this.h, Math.ceil(bx[3] * sc));
+    if (x1 <= x0 || y1 <= y0) return;
+    g.enable(g.SCISSOR_TEST); g.scissor(x0, this.h - y1, x1 - x0, y1 - y0);
+    g.texSubImage2D(g.TEXTURE_2D, 0, 0, 0, 256, 2, g.RGBA, g.FLOAT, B);
+    g.uniform1i(this.u.uN, n); g.uniform1f(this.u.uSc, this.sc); g.uniform1f(this.u.uH, this.h);
+    if (cap) { g.uniform4f(this.u.uCap, cap[0], cap[1], cap[2], cap[3]); g.uniform2f(this.u.uCapC, cap[4], cap[5]); } else g.uniform4f(this.u.uCap, 0, 0, 0, 0);
+    g.drawArrays(g.TRIANGLES, 0, 3);
+  };
+  Layer.prototype.drawCPU = function () {
+    if (!this.ok) return; if (!this.ctx) this.ctx = this.c.getContext("2d");
+    if (!this.img) { this.img = this.ctx.createImageData(this.w, this.h); }
+    var W = this.w, Hh = this.h, F = this.F, C = this.C, O = this.O, pb = this.pb, x, y, i;
+    if (pb) for (y = pb[1]; y <= pb[3]; y++) { i = y * W + pb[0]; F.fill(0, i, i + pb[2] - pb[0] + 1); C.fill(0, i, i + pb[2] - pb[0] + 1); O.fill(0, i, i + pb[2] - pb[0] + 1); }
+    var els = this.box.querySelectorAll(".mss-g,.mss-bar"), bb = [1e9, 1e9, -1e9, -1e9];
+    for (var n = 0; n < els.length; n++) {
+      var e = els[n]; if (e.style.transform === "scale(0)" && !e.getAnimations().length) continue; var cs = getComputedStyle(e), op = +cs.opacity; if (!(op > .01)) continue;
+      var mm = MRE.exec(cs.transform); if (!mm) continue; var M = mm[1].split(",").map(Number);
+      var col = (this.black || e.classList.contains("k") || e.classList.contains("k2")) ? 0 : 1, x0, x1, y0, y1;
+      if (e.classList.contains("mss-bar")) {
+        var bw = e.offsetWidth, bh = e.offsetHeight, rr = bh * M[3] / 2 * SC; if (rr < .5) continue;
+        var left = e.offsetLeft * SC, yc = (e.offsetTop + bh / 2) * SC, xa = left + rr, xb = Math.max(xa, left + bw * M[0] * SC - rr);
+        x0 = Math.max(1, Math.floor(xa - 2 * rr)); x1 = Math.min(W - 2, Math.ceil(xb + 2 * rr)); y0 = Math.max(1, Math.floor(yc - 2 * rr)); y1 = Math.min(Hh - 2, Math.ceil(yc + 2 * rr));
+        for (y = y0; y <= y1; y++) { var dy = (y + .5 - yc) / rr; for (x = x0; x <= x1; x++) { var px = x + .5, dx = (px < xa ? px - xa : px > xb ? px - xb : 0) / rr, r2 = dx * dx + dy * dy; if (r2 < 4) { var k = 1 - r2 * .25; k *= k; i = y * W + x; F[i] += k; C[i] += k * col; O[i] += k * op; } } }
+      } else {
+        var a = M[0], b = M[1], c = M[2], d = M[3], det = a * d - b * c; if (Math.abs(det) < 1e-6) continue;
+        var rad = (e._d || (e._d = e.offsetWidth)) / 2 * SC, cxp = M[4] * SC, cyp = M[5] * SC, ext = 2 * rad * Math.max(Math.hypot(a, b), Math.hypot(c, d));
+        if (ext < .5) continue;
+        x0 = Math.max(1, Math.floor(cxp - ext)); x1 = Math.min(W - 2, Math.ceil(cxp + ext)); y0 = Math.max(1, Math.floor(cyp - ext)); y1 = Math.min(Hh - 2, Math.ceil(cyp + ext));
+        var ia = d / det / rad, ib = -c / det / rad, ic2 = -b / det / rad, id = a / det / rad;
+        for (y = y0; y <= y1; y++) { var ddy = y + .5 - cyp, by = ib * ddy, dyy = id * ddy; for (x = x0; x <= x1; x++) { var ddx = x + .5 - cxp, qx = ia * ddx + by, qy = ic2 * ddx + dyy, q2 = qx * qx + qy * qy; if (q2 < 4) { var kk = 1 - q2 * .25; kk *= kk; i = y * W + x; F[i] += kk; C[i] += kk * col; O[i] += kk * op; } } }
+      }
+      if (x0 <= x1 && y0 <= y1) { if (x0 < bb[0]) bb[0] = x0; if (y0 < bb[1]) bb[1] = y0; if (x1 > bb[2]) bb[2] = x1; if (y1 > bb[3]) bb[3] = y1; }
+    }
+    var cur = bb[0] <= bb[2] ? bb : null, rg = cur && pb ? [Math.min(cur[0], pb[0]), Math.min(cur[1], pb[1]), Math.max(cur[2], pb[2]), Math.max(cur[3], pb[3])] : (cur || pb);
+    this.pb = cur; if (!rg) return;
+    var D = this.img.data;
+    for (y = rg[1]; y <= rg[3]; y++) for (x = rg[0]; x <= rg[2]; x++) {
+      i = y * W + x; var f = F[i], p = i * 4;
+      if (f < TH * .55) { D[p + 3] = 0; continue; }
+      var gx = (F[i + 1] - F[i - 1]) * .5, gy = (F[i + W] - F[i - W]) * .5, g = Math.sqrt(gx * gx + gy * gy) + 1e-6, w2 = Math.max(.015, g * .75);
+      var al = (f - (TH - w2)) / (2 * w2); al = al <= 0 ? 0 : al >= 1 ? 1 : al * al * (3 - 2 * al);
+      if (al <= 0) { D[p + 3] = 0; continue; }
+      var l = C[i] / f, o = O[i] / f, ed = 1 - (f - TH) / .75; ed = ed < 0 ? 0 : ed > 1 ? 1 : ed;
+      var nx = -gx / g * ed * .93, ny = -gy / g * ed * .93, nz = Math.sqrt(Math.max(0, 1 - nx * nx - ny * ny));
+      var ndl = nx * LX + ny * LY + nz * LZ, sp = nx * HX + ny * HY + nz * HZ; sp = sp > 0 ? Math.pow(sp, 26) : 0;
+      var rim = (1 - nz); rim *= rim;
+      var v = (8 + 240 * l) * (.8 + .22 * ndl), rs = DARK ? .9 - .55 * l : .3, rc = DARK ? 255 : (l > .5 ? 120 : 70);
+      v = v * (1 - rim * rs) + rc * rim * rs + sp * (DARK ? 240 : 200);
+      v = v < 0 ? 0 : v > 255 ? 255 : v;
+      D[p] = v - 2 < 0 ? 0 : v - 2; D[p + 1] = v - 1 < 0 ? 0 : v - 1; D[p + 2] = v + 2 > 255 ? 255 : v + 2; D[p + 3] = al * o * 255;
+    }
+    this.ctx.putImageData(this.img, 0, 0, rg[0], rg[1], rg[2] - rg[0] + 1, rg[3] - rg[1] + 1);
+  };
+  var DBG = /spdebug/.test(location.search); if (DBG) window.__dt = [];
+  function loop() { if (done) return; var q0 = DBG && performance.now(); for (var k = 0; k < layers.length; k++) layers[k].draw(); if (DBG) window.__dt.push([Math.round(q0), +(performance.now() - q0).toFixed(1)]); requestAnimationFrame(loop); }
   function rectOf(n) {
     if (!n) return null;
     var r = n.getBoundingClientRect(), cs = getComputedStyle(n);
@@ -181,7 +307,7 @@ html.mss-on .sidebar .logo>*,html.mss-on .topbar a.row>svg,html.mss-on .topbar a
     if (t) return { ic: t, lk: b.querySelector(".brand"), icn: b.querySelector("svg") };
     return null;
   }
-  var H, cx, cy, OD;
+  var H, cx, cy, OD, L3;
 
   // полёт: шар снова становится жидкой каплей — толстая голова, тонкий хвост — и садится на место значка
   function leave() {
@@ -196,9 +322,10 @@ html.mss-on .sidebar .logo>*,html.mss-on .topbar a.row>svg,html.mss-on .topbar a
     // слой только вокруг траектории — фильтр считает меньше пикселей, кадров больше
     var bx0 = Math.max(0, Math.min(p0[0], p1[0], p2[0]) - 70), by0 = Math.max(0, Math.min(p0[1], p1[1], p2[1]) - 70);
     setBox(g3, bx0, by0, Math.max(p0[0], p1[0], p2[0]) + 70 - bx0, Math.max(p0[1], p1[1], p2[1]) + 70 - by0);
+    L3.fit();
     var FD = 440, LAG = 60;
     A(orb, [{ opacity: 1, transform: T(ROOT, cx, cy, 1) }, { opacity: 0, transform: T(ROOT, cx, cy, .5) }], { duration: 120, easing: "ease-in", fill: "forwards" });
-    snake(g3, function (c) { return B(ease(c)); }, function (c) { var u = ease(c); return r0 + (rT * .95 - r0) * u; }, FD, LAG, 12, 0, "k2", .9, true);
+    snake(g3, function (c) { return B(ease(c)); }, function (c) { var u = ease(c); return r0 + (rT * .95 - r0) * u; }, FD, LAG, 24, 0, "k2", .9, true);
     later(function () {
       root.classList.remove("mss-on");
       try { t.icn.animate(frames(380, 20, function (tt) { var e = Math.exp(-tt / 90), c = Math.cos(2 * Math.PI * tt / 130); return { transform: "scale(" + (1 + .12 * e * c) + "," + (1 - .1 * e * c) + ")" }; }), { duration: 380 * S, easing: "linear" }); } catch (e) {}
@@ -221,6 +348,7 @@ html.mss-on .sidebar .logo>*,html.mss-on .topbar a.row>svg,html.mss-on .topbar a
     var w1 = Math.min(W, W * .45 + 2 * H + 160);
     setBox(g1, Math.max(0, icX - w1 / 2), 0, w1, cy + H * 1.7);
     setBox(g2, 0, cy - H * 1.35, W, H * 2.7);
+    var L1 = new Layer(g1, true), L2 = new Layer(g2, false); L3 = new Layer(g3, true); L1.fit(); L2.fit(); requestAnimationFrame(loop);
     OD = H * 1.12; orb.style.width = orb.style.height = OD + "px"; orb.style.marginLeft = orb.style.marginTop = (-OD / 2) + "px";
     $$(".mss-blob").forEach(function (b, i) {
       A(b, [{ opacity: 0, transform: "scale(.6)" }, { opacity: 1, transform: "scale(1)" }], { duration: 1100, delay: i * 120, easing: "ease-out" });
@@ -233,7 +361,7 @@ html.mss-on .sidebar .logo>*,html.mss-on .topbar a.row>svg,html.mss-on .topbar a
       var u = 1 - Math.pow(1 - t, 2), env = Math.pow(1 - u, 1.15) * Math.min(1, u * 5);
       var w = (AMP * Math.sin(6.283 * f1 * u + ph) + AMP * .45 * Math.sin(6.283 * f2 * u + ph * 1.7)) * env;
       return [sx + dx * u + nx * w, sy + dy * u + ny * w];
-    }, function (t) { return 4 + (R1 - 4) * Math.pow(t, 2.3); }, 480, 190, 28, 0);
+    }, function (t) { return 4 + (R1 - 4) * Math.pow(t, 2.3); }, 480, 190, 72, 0);
     // посадка капли: короткое вертикальное «шлёп»
     A(head, frames(140, 10, function (tt) { var e = Math.exp(-tt / 60), c = Math.cos(2 * Math.PI * tt / 100);
       return { transform: T(g1, icX, cy, s1, " translate(0px,0px) rotate(0deg) scale(" + (1 + .14 * e * c) + "," + (1 - .18 * e * c) + ")") }; }),
@@ -245,7 +373,7 @@ html.mss-on .sidebar .logo>*,html.mss-on .topbar a.row>svg,html.mss-on .topbar a
     var v = 1.6 * (xc - x0) / tc, dx2 = xEnd - xc, kk = Math.max(1.2, Math.min(5, v * (1 - tc) / dx2));
     var wx = function (t) { if (t < tc) return x0 + (xc - x0) * Math.pow(t / tc, 1.6); var s = (t - tc) / (1 - tc); return xc + dx2 * (1 - Math.pow(1 - s, kk)); };
     var wyf = function (t) { if (t < tc) { var u = t / tc; return y0 + (cy - y0) * (1 - Math.pow(1 - u, 2)); } var s = (t - tc) / (1 - tc); return cy + (cc[1] - cy) * (1 - Math.pow(1 - s, 2)); };
-    var whead = snake(g2, function (t) { return [wx(t), wyf(t)]; }, function (t) { return 3 + (R2 - 3) * Math.min(1, t * 2.2); }, WD, 130, 22, ws);
+    var whead = snake(g2, function (t) { return [wx(t), wyf(t)]; }, function (t) { return 3 + (R2 - 3) * Math.min(1, t * 2.2); }, WD, 130, 48, ws);
     var hit = ws + tc * WD, tex = tc;
     for (var j = 0; j <= 200; j++) { if (wx(tc + (1 - tc) * j / 200) >= icX + R1 * .75) { tex = tc + (1 - tc) * j / 200; break; } }
     var exitT = ws + tex * WD;
@@ -264,7 +392,7 @@ html.mss-on .sidebar .logo>*,html.mss-on .topbar a.row>svg,html.mss-on .topbar a
       var b = blob(g1, 64), a = rnd(-.9, .9), dist = R1 * rnd(.7, 1.4), sd = H * rnd(.1, .2) / 64, bx0 = icX + R1 * .7 * Math.cos(a), by0 = cy + R1 * .7 * Math.sin(a);
       A(b, [{ transform: T(g1, bx0, by0, sd * .6) },
             { transform: T(g1, bx0 + Math.cos(a) * dist, by0 + Math.sin(a) * dist + 6, sd), offset: .38 },
-            { transform: T(g1, icX + R1 * .3, cy, sd * .4) }], { duration: 360, delay: exitT - 20 + q * 8, easing: "cubic-bezier(.2,.7,.4,1)", fill: "forwards" });
+            { transform: T(g1, icX + R1 * .3, cy, sd * .4), offset: .85 }, { transform: T(g1, icX + R1 * .2, cy, 0) }], { duration: 360, delay: exitT - 20 + q * 8, easing: "cubic-bezier(.2,.7,.4,1)", fill: "forwards" });
     })(q);
     // 3. чёрная капля становится значком (колебание продолжается уже на значке)
     var icT = exitT + 40, dT = icT - hit;
@@ -305,10 +433,11 @@ html.mss-on .sidebar .logo>*,html.mss-on .topbar a.row>svg,html.mss-on .topbar a
   // 5. всё сливается в одну переливающуюся каплю
   function merge(icX, cr, mh) {
     var M = 380;
+    A(g1, [{ opacity: 1 }, { opacity: 0 }], { duration: 60, fill: "forwards" });
     [].slice.call(g2.querySelectorAll(".mss-g,.mss-bar")).forEach(function (n) { n.getAnimations().forEach(function (a) { a.cancel(); }); n.remove(); });
     var go = function (x, y, d, cls, del) {
       var b = blob(g2, 64, cls), s = d / 64, tx = cx + rnd(-.06, .06) * OD, ty = cy + rnd(-.06, .06) * OD;
-      A(b, [{ transform: T(g2, x, y, s * .85) }, { transform: T(g2, x, y, s), offset: .12 }, { transform: T(g2, tx, ty, s * .75) }],
+      A(b, [{ transform: T(g2, x, y, s * .85) }, { transform: T(g2, x, y, s), offset: .12 }, { transform: T(g2, tx, ty, s * (cls ? .8 : .42)) }],
         { duration: M, delay: del, easing: "cubic-bezier(.55,0,.3,1)", fill: "forwards" });
       return b;
     };
@@ -319,8 +448,8 @@ html.mss-on .sidebar .logo>*,html.mss-on .topbar a.row>svg,html.mss-on .topbar a
     A(chip, [{ opacity: 1 }, { opacity: 0 }], { duration: 90, delay: 30, fill: "forwards" });
     // в центре чёрное и белое закручиваются друг вокруг друга и перемешиваются
     var kc = blob(g2, 64, "k"), wc = blob(g2, 64), r = OD * .16;
-    A(kc, frames(320, 20, function (tt, p) { var a = p * 5; return { transform: T(g2, cx + Math.cos(a) * r, cy + Math.sin(a) * r, OD * .62 / 64 * Math.min(1, p * 2.5)) }; }), { duration: 320, delay: M - 120, easing: "linear", fill: "forwards" });
-    A(wc, frames(320, 20, function (tt, p) { var a = p * 5 + Math.PI; return { transform: T(g2, cx + Math.cos(a) * r, cy + Math.sin(a) * r, OD * .5 / 64 * Math.min(1, p * 2.5)) }; }), { duration: 320, delay: M - 120, easing: "linear", fill: "forwards" });
+    A(kc, frames(320, 30, function (tt, p) { var a = p * 5; return { transform: T(g2, cx + Math.cos(a) * r, cy + Math.sin(a) * r, OD * .78 / 64 * Math.min(1, p * 2.5)) }; }), { duration: 320, delay: M - 120, easing: "linear", fill: "forwards" });
+    A(wc, frames(320, 30, function (tt, p) { var a = p * 5 + Math.PI; return { transform: T(g2, cx + Math.cos(a) * r, cy + Math.sin(a) * r, OD * .34 / 64 * Math.min(1, p * 2.5)) }; }), { duration: 320, delay: M - 120, easing: "linear", fill: "forwards" });
     A(orb, frames(260, 14, function (tt, p) { var e = Math.exp(-tt / 80), c = Math.cos(2 * Math.PI * tt / 120);
       return { opacity: Math.min(1, p * 2.2), transform: T(ROOT, cx, cy, .82 + .18 * Math.min(1, p * 1.6), " scale(" + (1 + .1 * e * c) + "," + (1 - .1 * e * c) + ")") }; }),
       { duration: 260, delay: M + 60, easing: "linear", fill: "forwards" });
@@ -328,9 +457,16 @@ html.mss-on .sidebar .logo>*,html.mss-on .topbar a.row>svg,html.mss-on .topbar a
     later(function () { waitApp(performance.now()); }, M + 300);
   }
 
-  var started = false, go = function () { if (!started) { started = true; requestAnimationFrame(play); } };
-  try { Promise.all([document.fonts.load('800 20px FigtreeLogo'), document.fonts.load('900 20px FigtreeLogo')]).then(go, go); } catch (e) { go(); }
-  setTimeout(go, 700);
+  // старт — когда приложение под заставкой уже отрисовалось и кадры идут ровно (иначе загрузка сайта дёргает анимацию)
+  var T0 = performance.now(), started = false, fontsOk = false;
+  try { Promise.all([document.fonts.load('800 20px FigtreeLogo'), document.fonts.load('900 20px FigtreeLogo')]).then(function () { fontsOk = true; }, function () { fontsOk = true; }); } catch (e) { fontsOk = true; }
+  function appReady() { var r = document.getElementById("root"); return r && r.children.length > 0; }
+  function calm(cb) { var last = performance.now(), good = 0; (function f(now) { good = now - last < 22 ? good + 1 : 0; last = now; if (good >= 8 || now - T0 > 2300) return cb(); requestAnimationFrame(f); })(last); }
+  (function tryStart() {
+    if (started) return;
+    if ((fontsOk && appReady()) || performance.now() - T0 > 1800) { started = true; calm(function () { requestAnimationFrame(play); }); }
+    else setTimeout(tryStart, 40);
+  })();
   setTimeout(finish, 12000 * S);
 })();
 </script>
