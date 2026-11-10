@@ -307,3 +307,12 @@ a.row:has(>.bw-lock)>svg{width:36px;height:36px}
 .calc-panel:hover .rz-br::after,.calc-panel.resizing .rz-br::after{opacity:.8}
 .calc-panel.resizing{box-shadow:0 0 0 2px color-mix(in srgb,var(--teal) 45%,transparent),var(--pop-shadow);user-select:none;-webkit-user-select:none}
 @media (pointer:coarse),(max-width:760px){.calc-rz{display:none}.calc-panel{--cz:1!important}}
+
+/* — переход к подтеме: якоря и свечение найденного блока — */
+.bz-sub,.lb-term,.lb-fwrap{scroll-margin-top:20px}
+.ms-glow{animation:msGlow 2s cubic-bezier(.2,.7,.3,1) both;border-radius:14px}
+.bz-sub.ms-glow{padding:6px 10px;margin-left:-10px;margin-right:-10px}
+@keyframes msGlow{0%{box-shadow:0 0 0 0 transparent;background-color:transparent}
+ 14%{box-shadow:0 0 0 5px color-mix(in srgb,var(--teal) 55%,transparent),0 0 28px 6px color-mix(in srgb,var(--teal) 35%,transparent);background-color:color-mix(in srgb,var(--teal) 16%,transparent)}
+ 100%{box-shadow:0 0 0 5px transparent,0 0 28px 6px transparent;background-color:transparent}}
+@media (prefers-reduced-motion:reduce){.ms-glow{animation:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--teal) 55%,transparent)}}
