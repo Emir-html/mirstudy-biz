@@ -316,3 +316,6 @@ a.row:has(>.bw-lock)>svg{width:36px;height:36px}
  14%{box-shadow:0 0 0 5px color-mix(in srgb,var(--teal) 55%,transparent),0 0 28px 6px color-mix(in srgb,var(--teal) 35%,transparent);background-color:color-mix(in srgb,var(--teal) 16%,transparent)}
  100%{box-shadow:0 0 0 5px transparent,0 0 28px 6px transparent;background-color:transparent}}
 @media (prefers-reduced-motion:reduce){.ms-glow{animation:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--teal) 55%,transparent)}}
+
+/* — Telegram на компьютере: кнопка «во весь экран / в окно» рядом с темой — */
+.ms-hbtns{display:flex;gap:8px;align-items:flex-start;flex:none}
