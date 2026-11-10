@@ -319,3 +319,67 @@ a.row:has(>.bw-lock)>svg{width:36px;height:36px}
 
 /* — Telegram на компьютере: кнопка «во весь экран / в окно» рядом с темой — */
 .ms-hbtns{display:flex;gap:8px;align-items:flex-start;flex:none}
+
+/* — «Где ошибка»: разбор неверного числового ответа (dx-*) — */
+.dx-box{margin-top:12px;padding:14px 14px 12px;border-radius:18px;background:var(--surface);border:1px solid color-mix(in srgb,var(--rust) 35%,var(--border));display:flex;flex-direction:column;gap:10px;animation:dxIn .35s ease-out both;max-width:100%;overflow:hidden}
+.dx-box.none{border-color:color-mix(in srgb,var(--amber) 45%,var(--border))}
+.dx-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.dx-tag{font:600 10.5px/1 var(--mono);letter-spacing:.08em;color:var(--rust);background:var(--rust-soft);padding:5px 8px;border-radius:6px}
+.dx-chips{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.dx-chip{font-size:12.5px;padding:4px 10px;border-radius:99px;border:1px solid transparent}
+.dx-chip b{font-size:13px}
+.dx-chip.bad{background:var(--rust-soft);color:var(--rust);border-color:color-mix(in srgb,var(--rust) 30%,transparent)}
+.dx-chip.ok{background:var(--sage-soft);color:var(--sage);border-color:color-mix(in srgb,var(--sage) 30%,transparent)}
+.dx-title{font:700 clamp(16px,1.2vw + 12px,19px)/1.3 var(--font);margin:2px 0 0;text-wrap:balance}
+.dx-sub{font-size:14px;color:var(--text-muted);margin:0}
+.dx-alt{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-muted);flex-wrap:wrap}
+.dx-alt-b{width:28px;height:28px;border-radius:9px;border:1px solid var(--border);background:transparent;color:var(--text);font:600 13px var(--mono);cursor:pointer}
+.dx-alt-b.on{background:var(--text);color:var(--surface);border-color:var(--text)}
+.dx-chain{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-direction:column;gap:0;position:relative}
+.dx-row{display:flex;gap:10px;padding:6px 0 10px;position:relative;animation:dxRow .32s ease-out both;animation-delay:calc(var(--i) * 150ms)}
+.dx-row::before{content:"";position:absolute;left:7px;top:22px;bottom:-2px;width:2px;background:var(--border)}
+.dx-row:last-child::before{display:none}
+.dx-dot{flex:none;width:16px;height:16px;border-radius:50%;margin-top:3px;background:var(--sage);box-shadow:0 0 0 3px color-mix(in srgb,var(--sage) 22%,transparent);position:relative;z-index:1}
+.dx-row.bad .dx-dot,.dx-row.stop .dx-dot{background:var(--rust);box-shadow:0 0 0 3px color-mix(in srgb,var(--rust) 28%,transparent);animation:dxPulse 1.4s ease-out infinite}
+.dx-row.drift .dx-dot{background:color-mix(in srgb,var(--rust) 55%,var(--surface));box-shadow:none}
+.dx-row.todo .dx-dot{background:var(--border);box-shadow:none}
+.dx-body{min-width:0;flex:1;display:flex;flex-direction:column;gap:3px}
+.dx-lab{font:600 13.5px/1.35 var(--font)}
+.dx-lab em{font-style:normal;font-weight:500;color:var(--rust)}
+.dx-row.todo .dx-lab,.dx-row.todo .dx-line{color:var(--text-muted)}
+.dx-row.todo .dx-lab em{color:var(--text-muted)}
+.dx-line{display:flex;gap:8px;align-items:baseline;font-size:13.5px;line-height:1.45;min-width:0}
+.dx-k{flex:none;width:48px;font:600 10.5px/1.6 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted)}
+.dx-line.mine .dx-k{color:var(--rust)}
+.dx-line.mine{color:color-mix(in srgb,var(--rust) 80%,var(--text))}
+.dx-row.drift .dx-line.mine{color:color-mix(in srgb,var(--rust) 55%,var(--text-muted))}
+.dx-ex{font-family:var(--mono);font-size:13px;word-break:break-word;overflow-wrap:anywhere}
+.dx-t.op{margin:0 3px;color:var(--text-muted)}
+.dx-hl{background:var(--rust-soft);color:var(--rust);border-radius:5px;padding:0 4px;font-weight:700;box-shadow:0 0 0 1px color-mix(in srgb,var(--rust) 35%,transparent)}
+.dx-line.need .dx-hl{background:var(--sage-soft);color:var(--sage);box-shadow:0 0 0 1px color-mix(in srgb,var(--sage) 35%,transparent)}
+.dx-plate{margin:0;font-size:13.5px;line-height:1.5}
+.dx-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.dx-sim{margin-top:6px}
+.dx-steps{display:flex;flex-direction:column;gap:8px;padding:10px 12px;border-radius:14px;background:var(--surface-2)}
+.dx-steps-h{margin:0;font-size:13.5px;color:var(--text-muted)}
+.dx-srow{display:grid;grid-template-columns:minmax(0,1fr) 128px;gap:6px 10px;align-items:center;font-size:13.5px}
+.dx-slab{font-weight:600;min-width:0;overflow-wrap:anywhere}
+.dx-sin{width:100%;min-width:0;padding:8px 10px;font-size:14px}
+.dx-srow.ok .dx-sin{border-color:var(--sage)}
+.dx-srow.bad .dx-sin{border-color:var(--rust);box-shadow:0 0 0 3px color-mix(in srgb,var(--rust) 20%,transparent)}
+.dx-sneed{grid-column:1/-1;font-size:13px;color:var(--rust);padding-left:2px}
+.dx-sneed.ok{grid-column:2;color:var(--sage);font-weight:700;text-align:center}
+.dx-sres{font-size:13px;font-weight:600}
+.dx-sres.bad{color:var(--rust)}
+.dx-sres.ok{color:var(--sage);font-weight:500}
+.dx-traps{gap:10px}
+.dx-trap-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;counter-reset:dx}
+.dx-trap-list li{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:14px;background:var(--rust-soft);counter-increment:dx}
+.dx-trap-list li::before{content:counter(dx);flex:none;width:26px;height:26px;border-radius:9px;background:var(--rust);color:#fff;font:700 13px/26px var(--mono);text-align:center}
+.dx-trap-main{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1;font-size:13.5px;line-height:1.35}
+.dx-trap-main .muted{font-size:12px}
+@keyframes dxIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes dxRow{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+@keyframes dxPulse{0%{box-shadow:0 0 0 3px color-mix(in srgb,var(--rust) 35%,transparent)}70%{box-shadow:0 0 0 9px transparent}100%{box-shadow:0 0 0 9px transparent}}
+@media (max-width:480px){.dx-k{width:40px}.dx-srow{grid-template-columns:minmax(0,1fr) 104px}.dx-chips{margin-left:0}}
+@media (prefers-reduced-motion:reduce){.dx-box,.dx-row{animation:none}.dx-row.bad .dx-dot,.dx-row.stop .dx-dot{animation:none}}
